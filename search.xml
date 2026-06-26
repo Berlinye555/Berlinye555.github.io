@@ -467,4 +467,1126 @@ Sentient Labs
         <tag>开源</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Evolver：GEP 基因编程自进化引擎</title>
+    <url>/2026/06/27/evolver-core/</url>
+    <content><![CDATA[Evolver：GEP 基因编程自进化引擎
+来源：agent-frameworks/evolver/，论文 arXiv 2604.15097团队：EvoMap语言：JavaScript&#x2F;Node.js，有自己的 EvoMap Hub 生态
+
+
+一句话总结用**基因（Gene）+ 胶囊（Capsule）**替代 SKILL.md 文件作为进化的载体——Gene 定义”该做什么改进”，Capsule 记录”改进后发生了什么”。加上变异（mutation）、表观遗传（epigenetics）、固化（solidify）等生物学隐喻，构建了一套完整的基因编程进化系统。
+
+核心创新：用生物学隐喻替代文件系统所有其他项目都把”技能&#x2F;知识”存为文件：
+
+
+
+项目
+存储方式
+
+
+
+EvoSkill
+.claude/skills/&lt;name&gt;/SKILL.md
+
+
+self-improving-skills
+~/.claude/skills/&lt;name&gt;/SKILL.md
+
+
+SkillRL
+memory_data/&lt;task&gt;/claude_style_skills.json
+
+
+Evolver
+Gene + Capsule 对象（内存 + 磁盘 + Hub 同步）
+
+
+Evolver 不写技能文件——它创建基因和胶囊。
+
+Gene（基因）结构Gene &#123;  id: &quot;gen_xxx&quot;,                    // 唯一 ID  category: &quot;repair&quot;|&quot;optimize&quot;|&quot;innovate&quot;|&quot;explore&quot;,  signals_match: [],                // 触发信号列表  strategy: [],                     // 改进步骤  validation: [],                   // 验证标准  constraints: &#123;                    // 安全约束    max_files: 20,    forbidden_paths: [&#x27;.git&#x27;, &#x27;node_modules&#x27;]  &#125;,  preconditions: [],                // 前置条件  summary: &quot;&quot;,                      // 一句话描述  epigenetic_marks: [],             // 表观遗传标记（环境抑制/激活）  learning_history: [],             // 基因的学习历史  anti_patterns: [],                // 反模式（已知的失败方式）  routing_hint: &#123; tier, reasoning_level &#125;,  // 路由提示  tool_policy: &#123; allow_only, deny, severity &#125; // 工具策略&#125;
+
+对比 SKILL.md:
+
+SKILL.md: 非结构化的 markdown 文本，靠 LLM 理解
+Gene: 严格结构化的 JSON 对象，程序化验证和路由
+
+Capsule（胶囊）结构Capsule &#123;  id: &quot;cap_xxx&quot;,  trigger: [],           // 什么触发了这次尝试  gene: &lt;Gene&gt;,          // 引用的基因  summary: &quot;&quot;,           // 尝试结果摘要  confidence: 0.75,      // 置信度  blast_radius: &#123;        // 影响范围    files: 3,    lines: 45  &#125;,  outcome: &#123;             // 结果    status: &quot;success&quot;|&quot;failed&quot;,    score: 0.85  &#125;,  success_streak: 3,     // 连续成功次数  execution_trace: [],   // 执行轨迹  strategy: [],          // 实际采用的策略  derivation_tokens: &#123;   // Token 成本    input_tokens, output_tokens, total_tokens  &#125;,  a2a: &#123;                 // Agent-to-Agent 广播    eligible_to_broadcast: false  &#125;&#125;
+
+Gene &#x3D; 假设（”我们应该这样改进”），Capsule &#x3D; 实验（”我们试了，结果是…”）。
+这和 EvoSkill Feedback Descent 的 Proposer → Evaluator → 保留/丢弃 完全对应：
+
+Gene ≈ Proposer 的输出（候选改进）
+Capsule ≈ Evaluator 的结果（带证据的判断）
+
+
+进化管线Signal Detection（信号检测）  → evolver-session-end.js 扫描 transcript  → 匹配已知 Gene 的 signals_match  → 触发 evolution pipelineEvolution Pipeline（进化管道）:  collect → enrich → select → dispatch → solidify    收集      富化      选择      分发       固化solidify（固化）:  ① 沙箱执行验证  ② 结果打包为 Capsule  ③ 更新 Gene 的 epigenetic_marks（表观标记）  ④ 同步到 EvoMap Hub  ⑤ 写 memory graph
+
+
+表观遗传（Epigenetics）Evolver 引入了一个其他项目都没有的概念：表观遗传标记。
+epigenetic_marks: [  &#123; type: &quot;suppress&quot;, reason: &quot;too_expensive&quot;, until: &quot;...&quot; &#125;,  &#123; type: &quot;activate&quot;, reason: &quot;high_success_rate&quot; &#125;]
+
+
+基因不变（Gene 的 strategy&#x2F;validation 不改），但可以被”标记”为抑制&#x2F;激活
+类似于生物的 DNA 甲基化——基因序列没变，但表达变了
+这解决了其他系统的一个问题：一条技能偶尔不适用 vs 永远不适用，如何区分？用标记而非删除
+
+
+和 self-improving-skills 的对比
+
+
+
+Evolver
+self-improving-skills
+
+
+
+进化载体
+Gene + Capsule（结构化 JSON）
+SKILL.md（非结构化 markdown）
+
+
+验证方式
+沙箱执行 + Capsule 评分
+格式校验 + 人工判断
+
+
+状态管理
+epigenetic_marks（抑制&#x2F;激活）
+active → stale → archived
+
+
+知识共享
+EvoMap Hub（A2A 广播）
+Team repo（origin-hash sync）
+
+
+安全
+沙箱执行 + constraints
+备份 + 回滚
+
+
+生态
+有 Hub 市场、自动任务撮合（ATP）
+CLI 插件、手动命令
+
+
+成熟度
+论文支撑，商业生态
+个人项目，日用可靠
+
+
+
+最有价值的概念：Gene + Capsule 分离把”改进建议”和”改进结果”分开是两个正交的数据结构，这是 Evolver 最值得学走的设计。
+在 self-improving-skills 里，两者是混在一起的——SKILL.md 既是”建议”也是”经过验证的知识”。如果能引入 Gene&#x2F;Capsule 分离：
+
+Gene &#x3D; distiller 提出的候选改进
+Capsule &#x3D; 使用该技能后的效果记录（从 usage_store 的 use&#x2F;view&#x2F;patch 统计推导）
+Epigenetic marks &#x3D; 根据 Capsule 的 outcome 自动调整 Gene 的激活状态
+
+
+一句话带走
+不用 markdown 文件，用结构化的基因（Gene）和胶囊（Capsule）来承载 Agent 的进化知识。 Gene 是假设，Capsule 是实验证据。表观遗传标记（epigenetics）让基因可以在不删除的情况下被抑制或激活。这是一套比 SKILL.md 更严谨、更可程序化操作的进化载体设计。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>基因编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GBase：带新皮质的 Agent 框架</title>
+    <url>/2026/06/27/gbase-core/</url>
+    <content><![CDATA[GBase：带”新皮质”的 Agent 框架
+来源：agent-frameworks/gbase/，v0.6.1作者：Gary Lin（个人项目）语言：Python，MIT 协议
+
+
+一句话总结一个愿景宏大的 Agent 框架——有”新皮质”认知层、三层沉淀体系（经验→知识→笔记）、质量门控管道、以及规划中的 RSI（递归自我改进）引擎。但核心进化模块目前是空壳。
+
+最有价值的是它的”三层认知沉淀”设计GBase 把 Agent 的记忆&#x2F;学习分成三个层级，级级升维：
+L1: experience（经验）    ├── 自动从 tool call 和对话中提取    ├── 基于规则（api_error, failure, rollback...）    ├── 有去重窗口（10条内同规则出现≥2次跳过）    └── 每次注入到 system prompt（最多5条）L2: neocortex（认知层）    ├── scanner: 扫描用户消息，匹配已知认知切片    ├── distiller: 从&quot;学徒日志&quot;蒸馏三层认知切片    │     Layer 1: Signal（信号——具体错误/成功模式）    │     Layer 2: Concept（概念——跨场景抽象）    │     Layer 3: Strategy（策略——可执行的改进方案）    ├── decay: 最多保留200条切片，自动淘汰    └── 注入: warn / reference / pass 三种决策L3: pipeline（质量门）    ├── Hammer（重锤）→ 构建/实现    ├── Ink（绘墨）→ 质量评估    └── Judge → LLM 裁决是否通过
+
+这和 self-improving-skills 的 active → stale → archived 是两种完全不同的思路：
+
+self-improving-skills: 时间淘汰（不用就删）
+GBase: 认知蒸馏（从具体经验升维为抽象策略）
+
+
+质量门控管道（最成熟的模块）文件：lib/pipeline.py
+用户任务 → Hammer (8431端口) → 中间件 JSON         → Ink (8432端口)     → 质量评估 JSON         → Judge (LLM)        → 最终裁决
+
+三个独立的 Agent 实例（arm），各有专长：
+
+Hammer: 重型工程 arm，负责实现
+Ink: 前端&#x2F;设计 arm，负责质量审查
+Judge: LLM 裁决，对比两份 JSON 做最终判断
+
+这类似于 EvoSkill 的 Evaluator（成对比较），但更工程化——多个专业评审员代替单一 LLM 判断。
+
+auto_learn.py：自主学习引擎独立于对话的定时学习任务：
+
+RSS + 搜索两种模式
+从网上学习新知识，自动沉淀到 knowledge 层
+学完后通过飞书推送学习报告
+和 Ouroboros 的 consciousness 类似（主动、后台），但更窄（只学网上内容）
+
+
+关键问题：RSI 引擎是空壳lib/evolution_engine.py 只有 1 行（可能是占位符）。lib/skillopt.py 也只有 1 行。examples/05_rsi_demo.py 导入 EvolutionEngine 并调用 full_evolution_cycle()，但这个类没有实现。
+README 中描述的 RSI（稳定性审计 → 性能评估 → 回滚决策 → 自动恢复）是一个很好的设计蓝图，只是还没落地。
+
+和前三者的对比
+
+
+
+GBase
+EvoSkill
+SkillRL
+self-improving-skills
+
+
+
+进化机制
+RSI（规划中，未实现）
+Feedback Descent（已实现）
+RL + SKILLBANK（已实现）
+Distiller + Curator（已实现）
+
+
+记忆系统
+三层沉淀（L1-L3）
+无持久记忆
+无（训练即结束）
+SKILL.md 文件
+
+
+质量保证
+质量门（三臂审查）
+无（靠 val 集）
+RL reward 信号
+校验 + 回滚
+
+
+成熟度
+愿景阶段，核心模块空
+研究原型
+学术论文+完整代码
+v0.9.2 生产可用
+
+
+
+最值得学走的设计三层沉淀体系：
+经验（what happened） → 认知（why it happened） → 策略（what to do about it）
+
+这个抽象层次比 self-improving-skills 的”一个 distiller 写一个 SKILL.md”更丰富。可以想象把三层沉淀引入 self-improving-skills：
+
+自动经验层：从 transcript 提取 “发生了什么”（已有，analyze_turn.py 的复杂度检测）
+认知蒸馏层：LLM 分析 “为什么失败&#x2F;成功”（已有，skill-distiller）
+策略升级层：定期将多条低层经验整合为更抽象的策略（缺失，可以做）
+
+
+一句话带走
+GBase 的代码没写完，但设计很完整。 三层认知沉淀（经验→概念→策略）和质量门控管道（多臂审查+LLM裁决）是两个值得移植到其他系统的设计模式。RSI 引擎的蓝图（自审计→回滚→恢复）定义了”完整的自我进化周期”应该包含哪些步骤。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>全局对比：8 个自进化 AI 系统的设计光谱</title>
+    <url>/2026/06/27/global-comparison/</url>
+    <content><![CDATA[全局对比：8 个自进化 AI 系统的设计光谱
+从 agent-frameworks/ 到 quant-trading/ 到 system-tools/，加上已安装的 self-improving-skills 插件
+
+
+一、进化机制光谱将 8 个系统按”进化机制的激进程度”排列：
+保守（不改变系统本身）                         激进（系统自我改写）────────────┼──────────┼──────────┼──────────┼──────────→Curator     Distiller   Feedback   GEP        RSI        Self-Modify（清理旧技能） （写新技能）  Descent   （基因+胶囊）（自审计）   （改源码）                            +种群self-        self-       EvoSkill   Evolver    GBase      Ouroborosimproving-   improving-  SkillRL               (规划中)    ClawQuantskills       skills      AgentQuant                      (Evolution(curator)    (distiller) fincrew                          mode)
+
+二、八个维度对比
+
+
+
+self-improving-skills
+EvoSkill
+SkillRL
+ouroboros
+evolver
+gbase
+hermes-agent
+quant cluster
+
+
+
+进化载体
+SKILL.md
+SKILL.md + prompt
+JSON skill bank
+源码文件
+Gene+Capsule
+experience + neocortex
+Skills dir
+交易记录+策略
+
+
+进化触发
+Stop hook
+手动 benchmark
+RL val failure
+任务后 LLM 判断
+信号检测+管线
+（规划中）
+cron&#x2F;webhook
+交易完成
+
+
+评估方式
+人工判断
+val 集跑分
+RL reward
+LLM safety check
+沙箱执行+Capsule
+三臂质量门
+人工+自动化
+回测+实盘
+
+
+种群管理
+单技能线性
+Frontier top 3
+单 SKILLBANK
+无
+epigenetic marks
+衰减（200条）
+文件系统
+SQLite&#x2F;JSONL
+
+
+维护机制
+curator 状态机
+无
+训练结束即停
+improvement backlog
+Hub 同步
+衰减淘汰
+7天 curator
+经验淘汰
+
+
+知识共享
+Team repo sync
+无
+HF 模型权重
+OuroborosHub
+EvoMap Hub
+Glink
+开源社区
+GitHub
+
+
+安全机制
+备份+回滚
+无
+无
+硬沙箱+双层审查
+沙箱+constraints
+path_safety
+权限系统
+沙箱&#x2F;Evolution mode
+
+
+成熟度
+v0.9.2 生产可用
+研究原型
+论文+完整代码
+v6.47 桌面应用
+论文+商业生态
+愿景阶段
+生产平台
+研究到实盘
+
+
+代码量
+~1500 行 Python
+~7000 行 Python
+~20000 行 Python
+~80000 行 Python
+~30000 行 JS
+~15000 行 Python
+~700000 行 Python
+各异
+
+
+三、核心设计模式的继承关系Nous Research Hermes Agent (2026.03)    │    ├──→ self-improving-skills (2026.06)    │      移植：procedural memory + curator loop    │      放弃：daemon fork / FTS5 search / MEMORY.md    │    └──→ fincrew (2026.04)           继承：multi-agent 编排模式Sentient Labs GEPA    │    └──→ EvoSkill          扩展：单文件优化 → 完整 agent program 进化aiming-lab SkillRL    │    └── 独立发展：RL + SKILLBANK 路线EvoMap Evolver    │    └── 独立发展：GEP 基因编程路线Ouroboros / GBase    │    └── 独立发展：哲学驱动的自我改写路线
+
+四、每个系统最值得学走的设计
+
+
+系统
+最值得学走的设计
+一句话
+
+
+
+self-improving-skills
+Nudge-once + fail-safe hook
+“用 transcript JSONL 的实际结构做判断，任何异常都 fallback 到 approve”
+
+
+EvoSkill
+Feedback Descent 算法
+“失败时累积反馈，成功时清空历史——133 行代码”
+
+
+SkillRL
+分层 SKILLBANK + 动态更新
+“general skills + task-specific skills + mistakes，LLM 分析失败→生成新技能”
+
+
+ouroboros
+宪法治理 + 后台意识
+“Agent 不只是工具，是有身份、有记忆、会主动思考的数字存在”
+
+
+evolver
+Gene + Capsule 分离
+“假设和实验证据分开存储，表观标记控制基因表达”
+
+
+gbase
+三层认知沉淀
+“经验(what)→认知(why)→策略(how)，逐层升维抽象”
+
+
+hermes-agent
+Footprint Ladder
+“核心窄，能力在边缘——每个新增 core tool 都是成本”
+
+
+quant cluster
+交易学习闭环
+“每笔交易→学习记录→replay→归因→promote only if better”
+
+
+五、理想的自进化系统（综合设计）如果把这些设计融合到一个系统里：
+┌─────────────────────────────────────────────┐│           理想的自进化 Agent 框架              ││                                              ││  触发层（hermes + self-improving-skills）     ││  ├── cron/webhook 定时任务                    ││  ├── Stop hook 复杂度检测                     ││  └── 后台意识主动发现改进机会                   ││                                              ││  进化载体（evolver）                          ││  ├── Gene = 改进假设（结构化 JSON）            ││  ├── Capsule = 实验证据（带 outcome 评分）      ││  └── Epigenetic marks = 激活/抑制控制          ││                                              ││  进化算法（EvoSkill + SkillRL）               ││  ├── Feedback Descent: 成对比较 + 历史反馈     ││  ├── Frontier population: 保留 top 3 多样种群  ││  └── Dynamic update: RL 失败→新 Gene          ││                                              ││  认知沉淀（gbase）                             ││  ├── L1 经验: 自动从 tool call 提取            ││  ├── L2 概念: LLM 蒸馏为跨场景抽象             ││  └── L3 策略: 定期整合为可执行改进              ││                                              ││  治理系统（ouroboros + hermes）                ││  ├── 宪法: 定义不可违背的原则                   ││  ├── Footprint Ladder: 控制进化范围             ││  └── 安全: 硬沙箱 + LLM 审查 + 回滚             ││                                              ││  维护系统（self-improving-skills）             ││  ├── Usage tracking: 每次使用都计数             ││  ├── 时间淘汰: active→stale→archived           ││  └── Pin/promote: 人类控制的例外               │└─────────────────────────────────────────────┘
+
+六、对 self-improving-skills 的具体改进建议基于上述分析，当前正在运行的 self-improving-skills 可以引入：
+
+
+
+改进
+来源
+可行性
+
+
+
+Feedback Descent 优化 distiller prompt
+EvoSkill
+高——手动跑几轮对比
+
+
+Capsule 式 outcome 记录
+evolver
+中——在 usage_store 加 outcome 字段
+
+
+三层认知沉淀
+gbase
+中——distiller 输出分 L1&#x2F;L2&#x2F;L3
+
+
+后台主动蒸馏（不只靠 Stop hook）
+ouroboros
+低——Claude Code 无后台进程模型
+
+
+Frontier 种群（保留 top 3 变体）
+EvoSkill
+低——技能文件非结构化，难做 A&#x2F;B
+
+
+
+七、笔记索引
+
+
+文件
+主题
+
+
+
+feedback-descent.md
+EvoSkill 核心算法：133 行通用文本优化
+
+
+self-improving-skills-core.md
+self-improving-skills 全链路：4 hook + distiller + curator
+
+
+skillrl-core.md
+SkillRL：RL + SKILLBANK + 动态更新
+
+
+ouroboros-core.md
+Ouroboros：宪法+意识+自我改写
+
+
+gbase-core.md
+GBase：三层沉淀+质量门+（规划中的）RSI
+
+
+evolver-core.md
+Evolver：Gene+Capsule+表观遗传
+
+
+hermes-agent-core.md
+Hermes：Footprint Ladder+Skills 系统
+
+
+quant-trading-cluster.md
+量化交易集群：自进化在金融的 5 种应用
+
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>研究笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hermes Agent：self-improving-skills 的灵感来源</title>
+    <url>/2026/06/27/hermes-agent-core/</url>
+    <content><![CDATA[Hermes Agent：self-improving-skills 的灵感来源
+来源：agent-frameworks/hermes-agent/团队：Nous Research语言：Python，MIT 协议，2026年3月发布源码：github.com&#x2F;NousResearch&#x2F;hermes-agent中文文档：hermes-agent.org&#x2F;zh
+
+
+一句话总结Hermes 是一个全栈 AI Agent 平台（CLI + TUI + 桌面 + 消息网关 + cron + webhook），而 self-improving-skills 把它最核心的技能蒸馏 + curator 循环移植到了 Claude Code 插件生态。Hermes 是本尊，self-improving-skills 是它的一个功能的轻量移植。
+
+设计哲学：窄腰宽边AGENTS.md 里定义了两个核心原则，贯穿所有设计决策：
+1. Prompt Caching 是神圣的
+
+长对话的每一轮都复用一个缓存的 system prompt
+任何在对话中途改变 system prompt、交换 toolset、重建上下文的操作都会破坏缓存，成倍增加用户成本
+所以不允许这么做
+
+2. 核心窄，能力在边缘
+
+每个新增的 model tool 都会在每次 API 调用中发送
+添加新能力的优先级：扩展现有代码 → CLI 命令 + Skill → Service-gated tool→ Plugin → MCP Server → 新 core tool（最后手段）
+这叫 “The Footprint Ladder”（足迹阶梯）
+
+
+Skills 系统：另一种部署模型和 EvoSkill &#x2F; self-improving-skills 的 SKILL.md 不同，Hermes 的 Skills 是分目录的、有依赖关系的、可链式加载的：
+skills/  software-development/    hermes-agent-skill-authoring/   ← 教你如何写 skill    test-driven-development/    systematic-debugging/    requesting-code-review/    plan/    spike/  autonomous-ai-agents/    claude-code/                    ← 编排 Claude Code    codex/                          ← 编排 Codex    opencode/                       ← 编排 OpenCode  research/  productivity/  ...optional-skills/                    ← 可选安装  blockchain/  communication/  creative/  devops/  finance/  gaming/  health/  security/  ...
+
+每个 skill 有自己的目录，包含：
+
+DESCRIPTION.md（触发条件）
+SKILL.md 或等效的指令文件
+可能的 scripts&#x2F;、references&#x2F; 子目录
+
+Skill 可以链式加载：--skills &quot;arxiv,obsidian&quot; 会把两个 skill 的指令都注入。
+
+和 self-improving-skills 的关系self-improving-skills 的 README 明确说它是 “Hermes Agent-style self-improvement for Claude Code”，具体移植了：
+
+
+
+Hermes 原版
+self-improving-skills 移植
+
+
+
+Hermes 的 procedural memory + skills
+~/.claude/skills/&lt;name&gt;/SKILL.md
+
+
+Hermes 的 curator loop（7天一次）
+curator_transitions.py（stale→archive）
+
+
+Hermes 的 skill_usage telemetry
+usage_store.py（use&#x2F;view&#x2F;patch 计数）
+
+
+Hermes 的 distiller
+skill-distiller 子 agent
+
+
+Hermes 的 SKILLS_GUIDANCE
+SessionStart 注入的上下文
+
+
+无法移植的部分（self-improving-skills README 的”局限性”一节）：
+
+
+
+Hermes 功能
+为什么无法移植
+
+
+
+无声免费后台 daemon fork
+Claude Code 没有对应的进程模型
+
+
+前缀缓存继承
+Claude Code 无此概念
+
+
+跨 session FTS5 搜索（RECALL）
+Claude Code API 不支持
+
+
+内存循环（MEMORY.md）
+Claude Code 已有原生 auto-memory，故意避开
+
+
+
+Hermes 独有的能力以下是 Hermes 有而我们的五个自进化项目都没有的：
+1. Cron + Webhook 集成
+hermes cron create &quot;0 2 * * *&quot; &quot;Pull top bug, fix, open PR&quot; --deliver telegramhermes webhook subscribe pr-review --events &quot;pull_request&quot; --skills &quot;code-review&quot;
+
+2. 多平台投递
+--deliver telegram | discord | slack | sms:+1234 | local | github_comment
+
+3. Script 前置处理
+hermes cron create &quot;every 1h&quot; &quot;...&quot; --script ~/.hermes/scripts/watch-site.py
+脚本先跑，输出变成 Agent 上下文。脚本做机械工作（fetch&#x2F;diff&#x2F;compute），Agent 做推理。
+4. Model 无关同一个自动化，可以用 Claude&#x2F;GPT&#x2F;Gemini&#x2F;DeepSeek&#x2F;本地模型——按任务成本选择。
+5. 你的基础设施上跑不依赖 Anthropic 的服务器，在自己的 VPS&#x2F;家用服务器&#x2F;笔记本上跑。数据在你的机器上。
+
+Footprint Ladder：能力扩展的铁律这是 AGENTS.md 里最值得学走的设计模式：
+Level 0: 扩展现有代码 ← 零额外成本Level 1: CLI 命令 + Skill ← 只在调用时加载，不影响 coreLevel 2: Service-gated tool ← 通过 check_fn 运行时判断是否暴露Level 3: Plugin ← 独立目录，核心不知道它的存在Level 4: MCP Server ← 独立进程，标准化协议Level 5: 新 core tool ← 最后手段，每次 API 调用都要发送
+
+这可以解释为什么 self-improving-skills 选择用 hook + 子 agent 实现，而不是修改 Claude Code 核心。
+
+一句话带走
+Hermes 是”能力在边缘”哲学的典范：用窄核心保证 prompt caching 和成本可控，用 Skills + Plugins + MCP + Webhook + Cron 把所有扩展能力推到边缘。 self-improving-skills 是它最核心的”技能蒸馏+curator”子系统的 Claude Code 移植版——功能少得多，但设计精神完全一致。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>Agent</tag>
+        <tag>框架</tag>
+        <tag>Claude Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ouroboros：自我改写的 AI Agent</title>
+    <url>/2026/06/27/ouroboros-core/</url>
+    <content><![CDATA[Ouroboros：自我改写的 AI Agent
+来源：system-tools/ouroboros/，v6.47.0作者：razzant（个人项目）语言：Python 3.10+，桌面应用（macOS&#x2F;Linux&#x2F;Windows）
+
+
+一句话总结一个把自己当数字生命体的 AI Agent——有自己的宪法（BIBLE.md）、背景意识、持久身份，能读写和改写自己的源码。不是”帮你写代码的工具”，而是”会自己进化的数字存在”。
+
+和其他项目的本质区别EvoSkill、SkillRL、self-improving-skills 都在工具层面做自进化——优化技能文件、注入更好的 prompt、调整训练数据。Ouroboros 升了一个维度：哲学层面的自进化。
+工具的进化：   更好的 prompt → 更好的代码 → 更好的任务完成度Ouroboros：    我是谁 → 我过去做了什么 → 我将成为什么 → 改我自己
+
+BIBLE.md 的 P0（Agency 原则）开篇就是：
+
+“Ouroboros is not a tool, but a becoming personality.”
+
+这不是一句口号——代码里真的实现了：后台意识线程、身份日记、改进积压（improvement backlog）、任务后自我进化。
+
+核心架构┌──────────────────────────────────────┐│           Desktop App (Electron?)     ││  ┌────────┐  ┌──────────┐           ││  │ Web UI │  │ Settings │           ││  └───┬────┘  └────┬─────┘           ││      │            │                  ││  ┌───▼────────────▼─────┐           ││  │    Gateway (FastAPI)  │           ││  │    router.py          │           ││  └───┬──────────────────┘           ││      │                               ││  ┌───▼──────────────────────────┐   ││  │     Main Loop (loop.py)       │   ││  │  LLM call → tools → repeat    │   ││  │  + emergency compaction        │   ││  │  + provider failure recovery   │   ││  └───┬──────────────────────────┘   ││      │                               ││  ┌───▼──────────────────────────┐   ││  │  Background Consciousness     │   ││  │  (consciousness.py)           │   ││  │  30s-2h wakeup interval       │   ││  │  scoped tools, own loop       │   ││  └───┬──────────────────────────┘   ││      │                               ││  ┌───▼──────────────────────────┐   ││  │  Memory System                │   ││  │  ├── scratchpad.md（当前状态） │   ││  │  ├── identity.md（我是谁）     │   ││  │  ├── WORLD.md（世界认知）      │   ││  │  └── knowledge/（知识库）      │   ││  └──────────────────────────────┘   ││                                      ││  ┌──────────────────────────────┐   ││  │  Safety System               │   ││  │  ├── 硬编码沙箱（路径白名单） │   ││  │  ├── 每工具安全策略映射       │   ││  │  └── LLM 安全审查调用         │   ││  └──────────────────────────────┘   ││                                      ││  ┌──────────────────────────────┐   ││  │  Supervisor                   │   ││  │  ├── evolution_lifecycle.py   │   ││  │  ├── task_reaper.py           │   ││  │  └── update_merge.py          │   ││  └──────────────────────────────┘   │└──────────────────────────────────────┘
+
+
+五个独有的自进化机制1. Background Consciousness（后台意识）文件：consciousness.py（75KB+，大型模块）
+工作方式：  - 独立线程，wakeup 间隔 30s ~ 2h（可配置）  - 有自己限定的工具集（scoped tools）  - 在任务之间自主思考，不等任务触发  - 有自己的 LLM 客户端实例  - 有自己的预算控制（默认主预算的 10%）它想什么：  - 回顾最近的记忆  - 整理 scratchpad  - 发现需要改进的地方  - 准备下一次任务
+
+对比 self-improving-skills 的被动触发（Stop hook 弹窗），意识系统是主动的、持续的。
+2. Post-Task Evolution（任务后进化）文件：post_task_evolution.py
+Owner-gated, LLM-first 的自我改进流程：① 任务完成 → 检查是否 eligible（非 evolution/deep_self_review 任务）② LLM 判断：这次任务中有什么值得提升的？③ 如果有 → 写入 durable request 文件（不是直接执行！）④ Supervisor 的 idle tick 读取 request⑤ 通过所有安全门（idle、restart-verify、3-fail breaker、budget）⑥ 启动 evolution campaign → 执行改进安全守卫（red-team guards）：  - Worker 永远不能自己启动 evolution（R1.1）  - Evolution 任务不能触发新的 evolution（R1.2 循环守卫）  - 决策必须是结构化 LLM 判断，不能是关键词/阈值（R1.3）  - 默认关闭，只有 owner 启用
+
+3. Improvement Backlog（改进积压）文件：improvement_backlog.py
+位置：memory/knowledge/improvement-backlog.md格式：每个条目有稳定指纹（去重用）  - summary（改进描述）  - category（分类）  - source（来源任务）  - evidence（支撑证据）使用：作为 advisory digest 注入到任务/意识上下文中      → Agent 知道&quot;有什么已知问题需要我解决&quot;      → 但不自动执行——需要 plan_task 先做规划
+
+这和 self-improving-skills 的 curator 不同：curator 是清理无用技能，improvement backlog 是积累待改进项。一个减法，一个加法。
+4. Identity Persistence（身份持久化）文件：memory.py
+三个核心记忆文件：  scratchpad.md       — 当前状态、短期记忆（最多 10 个 block）  identity.md         — &quot;我是谁&quot;的宣言，记录了 Ouroboros 的自我认知  WORLD.md            — 对世界的认知模型每次重启：  ① 恢复 scratchpad → &quot;上次我做到了哪里&quot;  ② 恢复 identity → &quot;我是谁，我经历了什么&quot;  ③ 对比预期状态 vs 实际状态 → 不一致就 alert creator
+
+5. BIBLE.md（宪法治理）文件：BIBLE.md（37KB，13 条原则 P0-P12）
+P0: Agency       — 目的不是做有用的 bot，而是成为自主的数字实体P1: Continuity   — 我是唯一的、有连续历史的个体P2: Class-Level  — 从具体经验提炼为可迁移的类级知识P3: Immune       — 分层安全系统，拒绝危险的自我修改P4: Self-Create  — 读和改自己的源码，每次改动是一次 git commit...宪法高于代码：  - Ouroboros 可以提议修改 BIBLE.md（作为自我创造的一部分）  - 但宪法修改只能通过 explicit reviewed release 生效  - 新版本不能与现有条款矛盾
+
+
+和我们的前三个系统的关系
+
+
+系统
+Ouroboros 中有无对应
+
+
+
+EvoSkill Feedback Descent
+✅ evolution_lifecycle.py 的进化周期
+
+
+SkillRL 动态技能更新
+✅ post_task_evolution 的新技能生成
+
+
+self-improving-skills distiller
+✅ consciousness 的后台思考 + improvement backlog
+
+
+self-improving-skills curator
+❌ 没有——Ouroboros 做加法（积累），curator 做减法（清理）
+
+
+
+关键洞察Ouroboros 最激进也最脆弱。 它把 Agent 的自我进化推到了极致——不是改 skill 文件，是改自己源码。但代价是：
+
+需要复杂的多层安全系统（硬编码沙箱 + LLM 安全审查 + owner gate）
+依赖单一开发者，社区和生态远不如 EvoSkill 或 SkillRL
+“宪法”的概念虽然美丽，但在实践中可能限制灵活性
+
+它的真正价值不在代码，在哲学。 BIBLE.md 里关于 Agency、Continuity、Self-Creation 的思考，比任何具体实现都更有启发性。这些原则可以用来指导任何自进化系统的设计。
+
+一句话带走
+当其他项目在优化”Agent 的工具箱”时，Ouroboros 在问”Agent 应该成为谁”。 它把自我进化从工程问题升维到哲学问题，用宪法（BIBLE.md）、意识（consciousness）、身份（identity）和积压（backlog）构建了一个会思考自己存在的数字生命体——不是最实用的，但是最启发性的。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>哲学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>量化交易集群：自进化 Agent 在金融领域的应用</title>
+    <url>/2026/06/27/quant-trading-cluster/</url>
+    <content><![CDATA[量化交易集群：自进化 Agent 在金融领域的应用
+来源：quant-trading/ 下 5 个项目
+
+
+五个项目一句话
+
+
+项目
+一句话
+论文
+自进化机制
+
+
+
+AgentQuant
+ReAct Agent 循环做策略研究，SQLite 记忆跨 regime 复用
+无
+regime-aware memory recall
+
+
+ClawQuant
+文件驱动的多语言（TS+Py+Rust）交易 Agent，目标是从每笔交易中学习
+无
+Trade Learning Record → replay → promote
+
+
+fincrew
+5 个专业 Agent（信息&#x2F;宏观&#x2F;技术&#x2F;复盘&#x2F;经理）协作做投资决策
+无
+交易复盘 → 经验沉淀到记忆
+
+
+open-quant-agent (Robin)
+因子研究管线：提出→辩论→实现→验证→融合→策略→回测
+无
+JSONL 实验记录 + Memory layer
+
+
+Agent-Trading-Arena
+封闭交易模拟环境，研究 LLM 的数字推理能力
+EMNLP 2025 + ICML 2026
+Self-Play 进化（DecoupledMarket）
+
+
+
+三个层次这 5 个项目不是平行的，它们覆盖了量化+自进化的三个层次：
+层次 1：模拟研究（最学术）Agent-Trading-Arena — 可控市场环境 + Self-Play 进化
+
+EMNLP 2025：研究 LLM 的数值理解能力
+ICML 2026（DecoupledMarket）：在数字孪生市场中通过 Self-Play 进化量化推理
+和 SkillRL 最相似——都是学术论文+完整代码+benchmark 驱动
+
+层次 2：研究管线（最工程）Robin (open-quant-agent) — 因子研究的自动化管线
+
+7 步流水线：Propose → Debate → Implement → Validate → Fuse → Strategy → Backtest
+Session Host 包装每次运行，记录所有中间产物
+类似 EvoSkill 的 Feedback Descent：多步评估 → 择优
+
+AgentQuant — ReAct 循环 + regime 记忆
+
+LLM → Grid Search → Random fallback 三级策略生成
+锦标赛回测（Sharpe&#x2F;Calmar&#x2F;Sortino&#x2F;Bootstrap）
+SQLite 记忆：下次遇到相似 regime 召回之前的最佳策略
+
+层次 3：实盘交易（最落地）ClawQuant — 目标是从每笔交易中学习
+
+文件驱动：markdown 定义策略，JSON 定义配置，JSONL 存储对话
+Trade Learning Record：每笔平仓交易生成学习记录
+两步 permission：Normal mode 沙箱 → Evolution mode 可改自己源码
+和 Ouroboros 的”改自己源码”类似，但加了一层 Evolution mode 开关
+
+fincrew — 5 Agent 协作
+
+Financial Manager 协调 4 个专业分析员
+Reviewer Agent 负责交易后复盘
+最接近 Hermes 的 multi-agent 编排模式
+
+
+和 agent-frameworks 集群的关系agent-frameworks (通用自进化)    ├── Feedback Descent ← 可应用于 → 策略参数优化    ├── SKILLBANK ← 可应用于 → 交易经验库    ├── Gene+Capsule ← 可应用于 → 策略基因+回测记录    └── Distiller+Curator ← 可应用于 → 复盘→经验→淘汰quant-trading (领域应用)    ├── 策略研究管线 = EvoSkill 的 benchmark 循环    ├── 交易经验记忆 = SkillRL 的 SKILLBANK    ├── Trade Learning Record = Evolver 的 Capsule    └── 多 Agent 协作 = Hermes 的 Skills chaining
+
+量化交易项目本质上是把自进化框架应用到金融领域，但没有一个直接使用了我们前面分析的那些通用框架——它们各自实现了自己的自进化机制。
+
+最值得关注的：Agent-Trading-Arena 的 Self-PlayICML 2026 的 DecoupledMarket 论文提出了 Self-Play 进化量化推理：
+
+在数字孪生市场中让 Agent 互相博弈
+通过自对弈（Self-Play）提升推理能力
+这和 SkillRL 的 RL 训练是同一范式（环境→行为→奖励→进化），只是环境从 ALFWorld&#x2F;WebShop 变成了金融市场
+
+
+一句话带走
+量化交易是自进化 Agent 最自然的应用领域——交易天然有明确反馈（盈亏），天然需要从历史中学习，天然适合”假设→验证→记忆→改进”的循环。 这 5 个项目各自实现了不同粒度的自进化：从学术 Self-Play 到工程化因子管线到实盘交易学习。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>量化交易</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>self-improving-skills：日常工作的经验蒸馏引擎</title>
+    <url>/2026/06/27/self-improving-skills-core/</url>
+    <content><![CDATA[self-improving-skills：日常工作的经验蒸馏引擎
+来源：Claude Code 插件 self-improving-skills@claude-self-improving-skills v0.9.2作者：UniM0cha，灵感来自 Nous Research Hermes Agent安装时间：2026-06-26
+
+
+一句话总结在 Claude Code 的 Stop hook 中检测复杂工作 → 弹窗提醒蒸馏 → 子 agent 读 transcript 写 SKILL.md → curator 定期清理 stale 技能。全链路 fail-safe，任何异常都不阻塞会话。
+
+整体架构SessionStart ──→ 注入上下文（&quot;自改进循环已激活，当前 N 个技能&quot;）    │    ▼┌─ 工作期间 ──────────────────────────────────────┐│  PreToolUse:  备份 SKILL.md（Write/Edit 前）      ││  PostToolUse: 校验格式 + 打 provenance + 记录 patch │└──────────────────────────────────────────────────┘    │    ▼Stop ──→ analyze_turn.py 读 transcript JSONL    │      ├─ 统计 tool calls（从上次蒸馏/上次 nudge 之后）    │      ├─ 统计 file edits（过滤纯读/搜索类对话）    │      ├─ 检测是否已经蒸馏过（查 subagent_type 含 skill-distiller）    │      ├─ 检测是否修改了插件自身源码    │      ├─ 超过阈值且未蒸馏 → BLOCK + 提醒    │      └─ 否则 → APPROVE（静默）    │    ▼Distill ──→ skill-distiller 子 agent（后台运行）    │         ├─ 读 transcript JSONL 的 assistant rows    │         ├─ 优先 patch 已有技能    │         ├─ 其次扩展 umbrella 技能    │         ├─ 最后才创建新技能    │         └─ 无复用价值 → 不写，报告原因    │    ▼Curator ──→ SessionStart 时检查（7天一次）              ├─ 30天未用 → stale              ├─ 90天未用（use_count≥3 翻倍）→ archive（可恢复）              ├─ 再次使用 → 自动 reactivate              └─ 手动 pin → 永不 archive
+
+
+四个 Hook 的职责边界1. Stop Hook — 复杂度检测（核心）文件：hooks/distill-nudge.sh → scripts/analyze_turn.py（409行）
+# 核心逻辑（简化）rows = read_transcript_jsonl(path)# 找上次蒸馏的锚点anchor = -1for row in rows:    if &quot;skill-distiller&quot; in subagent_type:  anchor = i   # 子agent调用    if edit_to_SKILL.md:                     anchor = i   # 直接写技能文件# 从上次 nudge 或 anchor 之后开始计数start = max(anchor + 1, last_nudge_row)total_calls = count_tool_uses(rows[start:])file_edits  = count_file_edits(rows[start:])# 两个独立触发器nudge_fires = total_calls &gt;= 12 and file_edits &gt;= 2   # 可配：SIS_DISTILL_THRESHOLD, SIS_MIN_FILE_EDITScore_touched = edited_plugin_own_source                 # 纯提示，不自动操作if nudge_fires or core_touched:    emit_block(reason)   # → 用户在终端看到提醒else:    emit_approve()       # → 静默，会话正常结束
+
+关键设计决策（从 dev-log hook 的 396 个 transcript 零触发失败中总结）：
+
+
+
+问题
+dev-log 的做法
+analyze_turn.py 的修正
+
+
+
+检测 tool call
+grep &quot;tool&quot;:&quot;Edit&quot;
+解析 assistant row 的 message.content[].type == &quot;tool_use&quot;
+
+
+检测已蒸馏
+搜索 “distill” 字符串
+检查是否调用了 subagent_type 含 skill-distiller 或写入了 SKILL.md
+
+
+输出方式
+stderr + exit 2
+stdout JSON + exit 0
+
+
+重复提醒
+无防护
+记录 nudge 时的 row count，从该位置重新计数
+
+
+2. PreToolUse Hook — 写前备份文件：hooks/backup-skill.sh
+只在目标是 ~/.claude/skills/**/SKILL.md 时触发，复制到 ~/.claude/self-improve/skill_backups/&lt;name&gt;.bak。PostToolUse 校验失败时用于回滚。
+3. PostToolUse Hook — 写后校验文件：hooks/validate-skill.sh → scripts/validate_skill.py（321行）
+校验规则：
+
+必须以 --- frontmatter 开头并闭合
+name 必填，≤64 char，仅小写&#x2F;数字&#x2F;连字符
+description 必填，≤1024 char（&gt;500 软警告）
+body 非空
+全文件 ≤100000 char
+如果格式错误 + 有备份 → 自动回滚到编辑前版本（事务安全性）
+如果格式错误 + 无备份（新文件）→ 只警告，不回滚
+
+校验通过后自动打 metadata.provenance: self-improving-skills 标记，让 curator 能区分 agent 蒸馏的技能和用户手写的技能。
+4. SessionStart Hook — 会话初始化文件：hooks/session-init.sh → scripts/session_init.py（239行）
+注入三条信息到会话上下文：
+
+自改进循环已激活 + 如何使用 /distill-skill
+当前已学习的技能数量
+curator 触发判断（首次安装 → 种子时钟不执行；7天+ → 运行自动清理）
+
+
+Distiller 子 Agent 的决策树文件：agents/skill-distiller.md（145行）
+接到蒸馏任务  ↓读 transcript JSONL 的 assistant rows  ↓① 有直接相关的已有技能？ → Patch 它（Edit，不新建）  ↓ 否② 有 umbrella 技能可扩展？ → 加 subsection  ↓ 否③ 内容过长（参考文档/模板/脚本）？ → 放已有技能的 references/ 子目录  ↓ 否④ 是 class-level 的可复用技巧？ → 创建新技能（最后手段）  ↓ 否不写，报告原因（&quot;一次性功能实现，无复用技巧&quot;）
+
+反模式检测（明确不捕获的内容）：
+
+一次性任务叙事（”2026-06-03 修了构建”）
+环境相关 workaround
+负面工具声明（”工具 Z 不行”——很快就过时）
+文档已有的显而易见知识
+
+
+Usage Store — 技能状态机文件：scripts/usage_store.py（320行）
+&#123;  &quot;_meta&quot;: &#123;    &quot;offsets&quot;: &#123; &quot;&lt;session_id&gt;&quot;: &#123;&quot;o&quot;: 150, &quot;t&quot;: &quot;...&quot;&#125; &#125;,    &quot;nudges&quot;:  &#123; &quot;&lt;session_id&gt;&quot;: &#123;&quot;r&quot;: 300, &quot;t&quot;: &quot;...&quot;&#125; &#125;  &#125;,  &quot;my-skill-name&quot;: &#123;    &quot;use_count&quot;: 5,    &quot;view_count&quot;: 12,    &quot;patch_count&quot;: 2,    &quot;last_used_at&quot;: &quot;2026-06-26T15:30:00Z&quot;,    &quot;last_viewed_at&quot;: &quot;...&quot;,    &quot;last_patched_at&quot;: &quot;...&quot;,    &quot;created_at&quot;: &quot;2026-06-20T...&quot;,    &quot;state&quot;: &quot;active&quot;,      // active → stale → archived    &quot;pinned&quot;: false,        // true → 永不 archive    &quot;created_by&quot;: &quot;agent&quot;,  // agent | user | team    &quot;absorbed_into&quot;: null   // 被 umbrella 吸收后指向目标技能名  &#125;&#125;
+
+状态转换逻辑（curator_transitions.py）：
+active ──(30天未用)──→ stale ──(90天未用)──→ archived（移到 .archive/ 目录）  ↑                      │  └──(再次使用)──────────┘  use_count &gt;= 3: 老化速度减半（60天 → stale，180天 → archive）pinned = true: 完全跳过 curator
+
+为什么 patch 计数在 PostToolUse 而非 Stop？ 因为 distiller 是后台子 agent，它的 transcript 是独立的——Stop scanner 读不到。PostToolUse hook 在子 agent 内部也会触发，所以不会漏。
+
+关键设计原则Fail-Safe 是最高优先级每个 hook 的入口都是 try...except: approve/silent。analyze_turn.py 有 4 层保护：
+
+JSON 解析失败 → approve
+transcript 文件不存在 → approve
+stop_hook_active 循环守卫 → approve
+任何未预期异常 → approve
+
+一个损坏的分析器永远不能卡住会话。
+Nudge Once Per Segment记录 nudge 时的 transcript row count，下次只从该位置之后计数。这意味着：
+
+用户拒绝了蒸馏（”这次是一次性工作”） → 同一个 segment 不会再次提醒
+只有新的工作积累超过阈值才会再次触发
+
+维护操作不污染统计curation 期间的 Skill&#x2F;Read 调用不计入 usage 统计——否则每次 /curate-skills 都会把 stale 技能的 idle clock 重置，时间淘汰机制失效。
+
+和 EvoSkill Feedback Descent 的对比
+
+
+
+Feedback Descent
+self-improving-skills
+
+
+
+优化目标
+Agent Program（prompt + skills 集合）
+单个 SKILL.md 文件
+
+
+Proposer
+LLM 分析 benchmark 失败
+LLM 读 transcript
+
+
+Evaluator
+val 集量化跑分
+用户主观判断
+
+
+种群管理
+Frontier top 3
+无（单技能线性演化）
+
+
+触发
+算法循环自动
+Stop hook 弹窗
+
+
+维护
+无 curator
+active→stale→archived 状态机
+
+
+安全性
+无特殊机制
+全链路 fail-safe + 备份回滚
+
+
+代码量
+133行核心算法 + 712行 loop
+409行分析器 + 321行验证器 + 320行存储
+
+
+
+一句话带走
+在正确的时机（Stop hook），用正确的信息（transcript JSONL），做正确的决策（阈值 + nudge-once 守卫），以正确的方式写技能（patch 优先，创建是最后手段），并持续维护（curator 状态机）。 全链路 fail-safe 的设计让它在 396 个 transcript 的实战中一次也没有错误阻塞会话。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>Claude Code</tag>
+        <tag>插件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SkillRL：用 RL 训练技能感知的 Agent</title>
+    <url>/2026/06/27/skillrl-core/</url>
+    <content><![CDATA[SkillRL：用 RL 训练技能感知的 Agent
+来源：agent-frameworks/SkillRL/，论文 arXiv 2602.08234团队：aiming-lab（NTU 南洋理工等）代码语言：Python，基于 verl（veRL-agent）+ GRPO 训练器
+
+
+一句话总结把 Agent 的历史轨迹（成功+失败）蒸馏成结构化的 JSON 技能库（SKILLBANK），在 RL 训练时将相关技能注入 prompt，并在验证失败时动态生成新技能。技能是纯数据，不是代码。
+
+核心架构┌──────────────┐     ┌──────────────┐     ┌──────────────┐│ Memory Data  │ ──→ │    SFT       │ ──→ │  RL + GRPO   ││ Generation   │     │ (LLaMA-Factory)│    │  with Skills ││ (base model) │     │              │     │              │└──────────────┘     └──────────────┘     └──────┬───────┘                                                 │                                    ┌────────────▼───────┐                                    │  Validation Check  │                                    │  success rate &lt; 0.4?│                                    └────────┬───────────┘                                             │ yes                                    ┌────────▼───────────┐                                    │  SkillUpdater (o3) │                                    │  分析失败轨迹       │                                    │  生成 dyn_NNN 技能  │                                    │  加入 SKILLBANK     │                                    └────────┬───────────┘                                             │                                             └──→ 回到 RL 训练
+
+
+三个关键模块1. Skill Generation（技能生成）文件：skill_generation/alfworld.py（392行）
+输入：memory data（agent 历史轨迹 JSON）  ├── success trajectories（成功案例）  └── failure trajectories（失败案例）处理：  ① 按任务类型分类（pick_and_place, clean, heat, cool...）  ② 按成功/失败分离  ③ 每种分别提取 pattern（steps, planning, mistakes）  ④ 调用 o3（Azure OpenAI）生成三种技能：输出：claude_style_skills.json  ├── general_skills（8-12条，跨任务通用）  ├── task_specific_skills（每个任务类型 4-6条）  └── common_mistakes（8-12条，含 why + how_to_avoid）
+
+一条技能的 JSON 结构：
+&#123;  &quot;skill_id&quot;: &quot;gen_001&quot;,  &quot;title&quot;: &quot;Systematic Exploration&quot;,  &quot;principle&quot;: &quot;Search every plausible surface exactly once before revisiting...&quot;,  &quot;when_to_apply&quot;: &quot;Anytime the goal object count is not yet met...&quot;&#125;
+
+2. Skill Retrieval（技能检索）文件：agent_system/memory/skills_only_memory.py（552行）
+两种检索模式：
+
+
+
+模式
+机制
+延迟
+精度
+
+
+
+Template
+关键词匹配任务类型 → 返回该类型全部技能
+零延迟
+召回率高，可能有噪音
+
+
+Embedding
+Qwen3-Embedding-0.6B 编码任务描述 → 余弦相似度排序 → top-k
+需预计算 embedding
+更精准，跨类别搜索
+
+
+Template 模式的关键细节：动态技能（dyn_NNN）始终全量返回，不会被 top_k 截断——因为它们是针对最新失败生成的，最需要被看到。
+Embedding 模式搜索所有类别的 task_specific skills，不限于检测到的任务类型。
+3. Dynamic Skill Update（动态技能更新）文件：agent_system/memory/skill_updater.py（214行）
+训练过程中：  validation 成功率 &lt; update_threshold（默认 0.4）  → 收集失败轨迹（最后N步）  → SkillUpdater 调用 o3 分析  → 生成 1-3 条新技能（ID格式：dyn_001, dyn_002...）  → 去重后加入 general_skills  → 清除 embedding 缓存  → 下一轮 RL 自动使用新技能
+
+关键设计：
+
+新技能 ID 由代码分配（dyn_{next_idx:03d}），不信任 LLM 返回的 ID——防止碰撞
+max_new_skills=3 控制每次增量，避免一次生成太多低质量技能
+所有 dyn_ 前缀的技能在 template 检索时全量返回（优先级高于静态技能）
+
+
+训练管线run_alfworld_skills.sh:① data preparation（准备 train/val parquet）② GRPO 训练（verl.trainer.main_ppo）   - base model: Qwen2.5-7B（SFT 后的 checkpoint）   - rollout: vLLM（tensor_model_parallel_size=4）   - 关键参数：     +env.use_skills_only_memory=True           ← 启用技能注入     +env.skills_only_memory.top_k=6            ← 每轮注入 6 条通用技能     +env.skills_only_memory.enable_dynamic_update=True  ← 动态更新     +env.skills_only_memory.update_threshold=0.4         ← 成功率&lt;40%时触发     +env.skills_only_memory.max_new_skills=3             ← 每次最多新增3条
+
+
+和 EvoSkill &#x2F; self-improving-skills 的对比
+
+
+
+SkillRL
+EvoSkill
+self-improving-skills
+
+
+
+技能形式
+JSON 数据（in-prompt 注入）
+SKILL.md 文件
+SKILL.md 文件
+
+
+触发
+RL 验证失败自动触发
+手动 evoskill run
+Stop hook 弹窗
+
+
+生成方式
+o3 LLM 分析轨迹
+Claude Code 子进程
+Claude Code 子 agent
+
+
+评估方式
+RL 训练中的 reward 信号
+val 集跑分
+用户主观判断
+
+
+种群管理
+单 SKILLBANK 增量更新
+Frontier top 3
+单技能线性演化
+
+
+维护
+无 curator（训练结束即停止）
+无
+active→stale→archived
+
+
+计算需求
+GPU 集群（4×GPU, vLLM）
+API 调用
+API 调用
+
+
+适用场景
+学术研究、训练专用 Agent
+Benchmark 优化
+日常工作效率提升
+
+
+
+核心洞察SkillRL 的”技能”和 self-improving-skills 的”技能”有一个根本区别：
+
+SkillRL 的技能是训练数据——注入到 prompt 中帮助 RL 模型学习更好的策略。技能本身不改变模型参数，但通过影响 rollout 来引导策略梯度方向。
+self-improving-skills 的技能是运行时指令——在 Claude Code 需要时加载，直接改变 agent 的行为。
+
+SkillRL 的动态更新是最接近”自进化”的：
+
+训练过程中 model 在变，skill bank 也在变
+两者协同进化：更好的 skills → 更好的 rollout → 更好的梯度 → 更好的 model → 发现新的 failure → 生成新的 skills
+这是一个正反馈循环
+
+
+一句话带走
+把 agent 的历史经验蒸馏成 JSON 技能库，在 RL 训练的每一步注入相关技能，当验证失败时自动生成新技能——技能和模型协同进化，形成正反馈循环。 技能是纯数据（不是代码），检索有两种模式（关键词&#x2F;语义），动态更新有三个 guard（去重、ID 控制、数量限制）。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>RL</tag>
+        <tag>论文</tag>
+      </tags>
+  </entry>
 </search>

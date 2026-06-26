@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hermes Agent：self-improving-skills 的灵感来源 | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hermes Agent：self-improving-skills 的灵感来源">
+<meta property="og:url" content="https://berlinye555.github.io/2026/06/27/hermes-agent-core/index.html">
+<meta property="og:site_name" content="Berlinye">
+<meta property="og:description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/81288714?v=4">
+<meta property="article:published_time" content="2026-06-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-26T17:35:39.912Z">
+<meta property="article:author" content="Berlinye">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="框架">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://avatars.githubusercontent.com/u/81288714?v=4"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hermes Agent：self-improving-skills 的灵感来源",
+  "url": "https://berlinye555.github.io/2026/06/27/hermes-agent-core/",
+  "image": "https://avatars.githubusercontent.com/u/81288714?v=4",
+  "datePublished": "2026-06-26T16:00:00.000Z",
+  "dateModified": "2026-06-26T17:35:39.912Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Berlinye",
+      "url": "https://Berlinye555.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://berlinye555.github.io/2026/06/27/hermes-agent-core/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hermes Agent：self-improving-skills 的灵感来源',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/nanshen-full.css"><link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/fancyapps-ui/5.0.33/fancybox/fancybox.min.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">Hermes Agent：self-improving-skills 的灵感来源</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Hermes Agent：self-improving-skills 的灵感来源</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-26T17:35:39.912Z" title="更新于 2026-06-27 01:35:39">2026-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/">研究笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Hermes-Agent：self-improving-skills-的灵感来源"><a href="#Hermes-Agent：self-improving-skills-的灵感来源" class="headerlink" title="Hermes Agent：self-improving-skills 的灵感来源"></a>Hermes Agent：self-improving-skills 的灵感来源</h1><blockquote>
+<p>来源：<code>agent-frameworks/hermes-agent/</code><br>团队：Nous Research<br>语言：Python，MIT 协议，2026年3月发布<br>源码：<a target="_blank" rel="noopener" href="https://github.com/NousResearch/hermes-agent">github.com&#x2F;NousResearch&#x2F;hermes-agent</a><br>中文文档：<a target="_blank" rel="noopener" href="https://hermes-agent.org/zh/">hermes-agent.org&#x2F;zh</a></p>
+</blockquote>
+<hr>
+<h2 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h2><p>Hermes 是一个全栈 AI Agent 平台（CLI + TUI + 桌面 + 消息网关 + cron + webhook），而 self-improving-skills 把它最核心的<strong>技能蒸馏 + curator 循环</strong>移植到了 Claude Code 插件生态。Hermes 是本尊，self-improving-skills 是它的一个功能的轻量移植。</p>
+<hr>
+<h2 id="设计哲学：窄腰宽边"><a href="#设计哲学：窄腰宽边" class="headerlink" title="设计哲学：窄腰宽边"></a>设计哲学：窄腰宽边</h2><p>AGENTS.md 里定义了两个核心原则，贯穿所有设计决策：</p>
+<p><strong>1. Prompt Caching 是神圣的</strong></p>
+<ul>
+<li>长对话的每一轮都复用一个缓存的 system prompt</li>
+<li>任何在对话中途改变 system prompt、交换 toolset、重建上下文的操作都会<strong>破坏缓存</strong>，成倍增加用户成本</li>
+<li>所以不允许这么做</li>
+</ul>
+<p><strong>2. 核心窄，能力在边缘</strong></p>
+<ul>
+<li>每个新增的 model tool 都会在每次 API 调用中发送</li>
+<li>添加新能力的优先级：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">扩展现有代码 → CLI 命令 + Skill → Service-gated tool</span><br><span class="line">→ Plugin → MCP Server → 新 core tool（最后手段）</span><br></pre></td></tr></table></figure></li>
+<li>这叫 “The Footprint Ladder”（足迹阶梯）</li>
+</ul>
+<hr>
+<h2 id="Skills-系统：另一种部署模型"><a href="#Skills-系统：另一种部署模型" class="headerlink" title="Skills 系统：另一种部署模型"></a>Skills 系统：另一种部署模型</h2><p>和 EvoSkill &#x2F; self-improving-skills 的 SKILL.md 不同，Hermes 的 Skills 是<strong>分目录的、有依赖关系的、可链式加载的</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">skills/</span><br><span class="line">  software-development/</span><br><span class="line">    hermes-agent-skill-authoring/   ← 教你如何写 skill</span><br><span class="line">    test-driven-development/</span><br><span class="line">    systematic-debugging/</span><br><span class="line">    requesting-code-review/</span><br><span class="line">    plan/</span><br><span class="line">    spike/</span><br><span class="line">  autonomous-ai-agents/</span><br><span class="line">    claude-code/                    ← 编排 Claude Code</span><br><span class="line">    codex/                          ← 编排 Codex</span><br><span class="line">    opencode/                       ← 编排 OpenCode</span><br><span class="line">  research/</span><br><span class="line">  productivity/</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">optional-skills/                    ← 可选安装</span><br><span class="line">  blockchain/  communication/  creative/  devops/</span><br><span class="line">  finance/  gaming/  health/  security/  ...</span><br></pre></td></tr></table></figure>
+
+<p>每个 skill 有自己的目录，包含：</p>
+<ul>
+<li>DESCRIPTION.md（触发条件）</li>
+<li>SKILL.md 或等效的指令文件</li>
+<li>可能的 scripts&#x2F;、references&#x2F; 子目录</li>
+</ul>
+<p><strong>Skill 可以链式加载</strong>：<code>--skills &quot;arxiv,obsidian&quot;</code> 会把两个 skill 的指令都注入。</p>
+<hr>
+<h2 id="和-self-improving-skills-的关系"><a href="#和-self-improving-skills-的关系" class="headerlink" title="和 self-improving-skills 的关系"></a>和 self-improving-skills 的关系</h2><p>self-improving-skills 的 README 明确说它是 “Hermes Agent-style self-improvement for Claude Code”，具体移植了：</p>
+<table>
+<thead>
+<tr>
+<th>Hermes 原版</th>
+<th>self-improving-skills 移植</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hermes 的 procedural memory + skills</td>
+<td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+</tr>
+<tr>
+<td>Hermes 的 curator loop（7天一次）</td>
+<td>curator_transitions.py（stale→archive）</td>
+</tr>
+<tr>
+<td>Hermes 的 skill_usage telemetry</td>
+<td>usage_store.py（use&#x2F;view&#x2F;patch 计数）</td>
+</tr>
+<tr>
+<td>Hermes 的 distiller</td>
+<td>skill-distiller 子 agent</td>
+</tr>
+<tr>
+<td>Hermes 的 SKILLS_GUIDANCE</td>
+<td>SessionStart 注入的上下文</td>
+</tr>
+</tbody></table>
+<p><strong>无法移植的部分</strong>（self-improving-skills README 的”局限性”一节）：</p>
+<table>
+<thead>
+<tr>
+<th>Hermes 功能</th>
+<th>为什么无法移植</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无声免费后台 daemon fork</td>
+<td>Claude Code 没有对应的进程模型</td>
+</tr>
+<tr>
+<td>前缀缓存继承</td>
+<td>Claude Code 无此概念</td>
+</tr>
+<tr>
+<td>跨 session FTS5 搜索（RECALL）</td>
+<td>Claude Code API 不支持</td>
+</tr>
+<tr>
+<td>内存循环（MEMORY.md）</td>
+<td>Claude Code 已有原生 auto-memory，故意避开</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Hermes-独有的能力"><a href="#Hermes-独有的能力" class="headerlink" title="Hermes 独有的能力"></a>Hermes 独有的能力</h2><p>以下是 Hermes 有而我们的五个自进化项目都没有的：</p>
+<p><strong>1. Cron + Webhook 集成</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hermes cron create &quot;0 2 * * *&quot; &quot;Pull top bug, fix, open PR&quot; --deliver telegram</span><br><span class="line">hermes webhook subscribe pr-review --events &quot;pull_request&quot; --skills &quot;code-review&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 多平台投递</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--deliver telegram | discord | slack | sms:+1234 | local | github_comment</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. Script 前置处理</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hermes cron create &quot;every 1h&quot; &quot;...&quot; --script ~/.hermes/scripts/watch-site.py</span><br></pre></td></tr></table></figure>
+<p>脚本先跑，输出变成 Agent 上下文。脚本做机械工作（fetch&#x2F;diff&#x2F;compute），Agent 做推理。</p>
+<p><strong>4. Model 无关</strong><br>同一个自动化，可以用 Claude&#x2F;GPT&#x2F;Gemini&#x2F;DeepSeek&#x2F;本地模型——按任务成本选择。</p>
+<p><strong>5. 你的基础设施上跑</strong><br>不依赖 Anthropic 的服务器，在自己的 VPS&#x2F;家用服务器&#x2F;笔记本上跑。数据在你的机器上。</p>
+<hr>
+<h2 id="Footprint-Ladder：能力扩展的铁律"><a href="#Footprint-Ladder：能力扩展的铁律" class="headerlink" title="Footprint Ladder：能力扩展的铁律"></a>Footprint Ladder：能力扩展的铁律</h2><p>这是 AGENTS.md 里最值得学走的设计模式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Level 0: 扩展现有代码 ← 零额外成本</span><br><span class="line">Level 1: CLI 命令 + Skill ← 只在调用时加载，不影响 core</span><br><span class="line">Level 2: Service-gated tool ← 通过 check_fn 运行时判断是否暴露</span><br><span class="line">Level 3: Plugin ← 独立目录，核心不知道它的存在</span><br><span class="line">Level 4: MCP Server ← 独立进程，标准化协议</span><br><span class="line">Level 5: 新 core tool ← 最后手段，每次 API 调用都要发送</span><br></pre></td></tr></table></figure>
+
+<p>这可以解释为什么 self-improving-skills 选择用 hook + 子 agent 实现，而不是修改 Claude Code 核心。</p>
+<hr>
+<h2 id="一句话带走"><a href="#一句话带走" class="headerlink" title="一句话带走"></a>一句话带走</h2><blockquote>
+<p><strong>Hermes 是”能力在边缘”哲学的典范：用窄核心保证 prompt caching 和成本可控，用 Skills + Plugins + MCP + Webhook + Cron 把所有扩展能力推到边缘。</strong> self-improving-skills 是它最核心的”技能蒸馏+curator”子系统的 Claude Code 移植版——功能少得多，但设计精神完全一致。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/27/hermes-agent-core/">https://berlinye555.github.io/2026/06/27/hermes-agent-core/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/%E6%A1%86%E6%9E%B6/">框架</a><a class="post-meta__tags" href="/tags/Claude-Code/">Claude Code</a></div><div class="post-share"><div class="social-share" data-image="https://avatars.githubusercontent.com/u/81288714?v=4" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Ouroboros：自我改写的 AI Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">全局对比：8 个自进化 AI 系统的设计光谱</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">GBase：带新皮质的 Agent 框架</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/self-improving-skills-core/" title="self-improving-skills：日常工作的经验蒸馏引擎"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">self-improving-skills：日常工作的经验蒸馏引擎</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">Ouroboros：自我改写的 AI Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">SkillRL：用 RL 训练技能感知的 Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">量化交易集群：自进化 Agent 在金融领域的应用</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">Evolver：GEP 基因编程自进化引擎</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">[object Object]</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hermes-Agent%EF%BC%9Aself-improving-skills-%E7%9A%84%E7%81%B5%E6%84%9F%E6%9D%A5%E6%BA%90"><span class="toc-number">1.</span> <span class="toc-text">Hermes Agent：self-improving-skills 的灵感来源</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.</span> <span class="toc-text">一句话总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%EF%BC%9A%E7%AA%84%E8%85%B0%E5%AE%BD%E8%BE%B9"><span class="toc-number">1.2.</span> <span class="toc-text">设计哲学：窄腰宽边</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Skills-%E7%B3%BB%E7%BB%9F%EF%BC%9A%E5%8F%A6%E4%B8%80%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">Skills 系统：另一种部署模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C-self-improving-skills-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.4.</span> <span class="toc-text">和 self-improving-skills 的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hermes-%E7%8B%AC%E6%9C%89%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="toc-number">1.5.</span> <span class="toc-text">Hermes 独有的能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Footprint-Ladder%EF%BC%9A%E8%83%BD%E5%8A%9B%E6%89%A9%E5%B1%95%E7%9A%84%E9%93%81%E5%BE%8B"><span class="toc-number">1.6.</span> <span class="toc-text">Footprint Ladder：能力扩展的铁律</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%B8%A6%E8%B5%B0"><span class="toc-number">1.7.</span> <span class="toc-text">一句话带走</span></a></li></ol></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>系列文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/hermes-agent-core/" title="Hermes Agent：self-improving-skills 的灵感来源">Hermes Agent：self-improving-skills 的灵感来源</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent">Ouroboros：自我改写的 AI Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用">量化交易集群：自进化 Agent 在金融领域的应用</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-improving-skills-core/" title="self-improving-skills：日常工作的经验蒸馏引擎">self-improving-skills：日常工作的经验蒸馏引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent">SkillRL：用 RL 训练技能感知的 Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法">Feedback Descent——用文本反馈驱动优化的通用算法</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '',
+      'data-repo-id': '',
+      'data-category-id': '',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

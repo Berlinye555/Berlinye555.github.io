@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ouroboros：自我改写的 AI Agent | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ouroboros：自我改写的 AI Agent">
+<meta property="og:url" content="https://berlinye555.github.io/2026/06/27/ouroboros-core/index.html">
+<meta property="og:site_name" content="Berlinye">
+<meta property="og:description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/81288714?v=4">
+<meta property="article:published_time" content="2026-06-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-26T17:35:39.907Z">
+<meta property="article:author" content="Berlinye">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="哲学">
+<meta property="article:tag" content="自进化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://avatars.githubusercontent.com/u/81288714?v=4"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ouroboros：自我改写的 AI Agent",
+  "url": "https://berlinye555.github.io/2026/06/27/ouroboros-core/",
+  "image": "https://avatars.githubusercontent.com/u/81288714?v=4",
+  "datePublished": "2026-06-26T16:00:00.000Z",
+  "dateModified": "2026-06-26T17:35:39.907Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Berlinye",
+      "url": "https://Berlinye555.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://berlinye555.github.io/2026/06/27/ouroboros-core/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ouroboros：自我改写的 AI Agent',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/nanshen-full.css"><link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/fancyapps-ui/5.0.33/fancybox/fancybox.min.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">Ouroboros：自我改写的 AI Agent</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Ouroboros：自我改写的 AI Agent</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-26T17:35:39.907Z" title="更新于 2026-06-27 01:35:39">2026-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/">研究笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Ouroboros：自我改写的-AI-Agent"><a href="#Ouroboros：自我改写的-AI-Agent" class="headerlink" title="Ouroboros：自我改写的 AI Agent"></a>Ouroboros：自我改写的 AI Agent</h1><blockquote>
+<p>来源：<code>system-tools/ouroboros/</code>，v6.47.0<br>作者：razzant（个人项目）<br>语言：Python 3.10+，桌面应用（macOS&#x2F;Linux&#x2F;Windows）</p>
+</blockquote>
+<hr>
+<h2 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h2><p>一个<strong>把自己当数字生命体</strong>的 AI Agent——有自己的宪法（BIBLE.md）、背景意识、持久身份，能读写和改写自己的源码。不是”帮你写代码的工具”，而是”会自己进化的数字存在”。</p>
+<hr>
+<h2 id="和其他项目的本质区别"><a href="#和其他项目的本质区别" class="headerlink" title="和其他项目的本质区别"></a>和其他项目的本质区别</h2><p>EvoSkill、SkillRL、self-improving-skills 都在<strong>工具层面</strong>做自进化——优化技能文件、注入更好的 prompt、调整训练数据。Ouroboros 升了一个维度：<strong>哲学层面</strong>的自进化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">工具的进化：   更好的 prompt → 更好的代码 → 更好的任务完成度</span><br><span class="line">Ouroboros：    我是谁 → 我过去做了什么 → 我将成为什么 → 改我自己</span><br></pre></td></tr></table></figure>
+
+<p>BIBLE.md 的 P0（Agency 原则）开篇就是：</p>
+<blockquote>
+<p>“Ouroboros is not a tool, but a becoming personality.”</p>
+</blockquote>
+<p>这不是一句口号——代码里真的实现了：后台意识线程、身份日记、改进积压（improvement backlog）、任务后自我进化。</p>
+<hr>
+<h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────┐</span><br><span class="line">│           Desktop App (Electron?)     │</span><br><span class="line">│  ┌────────┐  ┌──────────┐           │</span><br><span class="line">│  │ Web UI │  │ Settings │           │</span><br><span class="line">│  └───┬────┘  └────┬─────┘           │</span><br><span class="line">│      │            │                  │</span><br><span class="line">│  ┌───▼────────────▼─────┐           │</span><br><span class="line">│  │    Gateway (FastAPI)  │           │</span><br><span class="line">│  │    router.py          │           │</span><br><span class="line">│  └───┬──────────────────┘           │</span><br><span class="line">│      │                               │</span><br><span class="line">│  ┌───▼──────────────────────────┐   │</span><br><span class="line">│  │     Main Loop (loop.py)       │   │</span><br><span class="line">│  │  LLM call → tools → repeat    │   │</span><br><span class="line">│  │  + emergency compaction        │   │</span><br><span class="line">│  │  + provider failure recovery   │   │</span><br><span class="line">│  └───┬──────────────────────────┘   │</span><br><span class="line">│      │                               │</span><br><span class="line">│  ┌───▼──────────────────────────┐   │</span><br><span class="line">│  │  Background Consciousness     │   │</span><br><span class="line">│  │  (consciousness.py)           │   │</span><br><span class="line">│  │  30s-2h wakeup interval       │   │</span><br><span class="line">│  │  scoped tools, own loop       │   │</span><br><span class="line">│  └───┬──────────────────────────┘   │</span><br><span class="line">│      │                               │</span><br><span class="line">│  ┌───▼──────────────────────────┐   │</span><br><span class="line">│  │  Memory System                │   │</span><br><span class="line">│  │  ├── scratchpad.md（当前状态） │   │</span><br><span class="line">│  │  ├── identity.md（我是谁）     │   │</span><br><span class="line">│  │  ├── WORLD.md（世界认知）      │   │</span><br><span class="line">│  │  └── knowledge/（知识库）      │   │</span><br><span class="line">│  └──────────────────────────────┘   │</span><br><span class="line">│                                      │</span><br><span class="line">│  ┌──────────────────────────────┐   │</span><br><span class="line">│  │  Safety System               │   │</span><br><span class="line">│  │  ├── 硬编码沙箱（路径白名单） │   │</span><br><span class="line">│  │  ├── 每工具安全策略映射       │   │</span><br><span class="line">│  │  └── LLM 安全审查调用         │   │</span><br><span class="line">│  └──────────────────────────────┘   │</span><br><span class="line">│                                      │</span><br><span class="line">│  ┌──────────────────────────────┐   │</span><br><span class="line">│  │  Supervisor                   │   │</span><br><span class="line">│  │  ├── evolution_lifecycle.py   │   │</span><br><span class="line">│  │  ├── task_reaper.py           │   │</span><br><span class="line">│  │  └── update_merge.py          │   │</span><br><span class="line">│  └──────────────────────────────┘   │</span><br><span class="line">└──────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五个独有的自进化机制"><a href="#五个独有的自进化机制" class="headerlink" title="五个独有的自进化机制"></a>五个独有的自进化机制</h2><h3 id="1-Background-Consciousness（后台意识）"><a href="#1-Background-Consciousness（后台意识）" class="headerlink" title="1. Background Consciousness（后台意识）"></a>1. Background Consciousness（后台意识）</h3><p>文件：<code>consciousness.py</code>（75KB+，大型模块）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">工作方式：</span><br><span class="line">  - 独立线程，wakeup 间隔 30s ~ 2h（可配置）</span><br><span class="line">  - 有自己限定的工具集（scoped tools）</span><br><span class="line">  - 在任务之间自主思考，不等任务触发</span><br><span class="line">  - 有自己的 LLM 客户端实例</span><br><span class="line">  - 有自己的预算控制（默认主预算的 10%）</span><br><span class="line"></span><br><span class="line">它想什么：</span><br><span class="line">  - 回顾最近的记忆</span><br><span class="line">  - 整理 scratchpad</span><br><span class="line">  - 发现需要改进的地方</span><br><span class="line">  - 准备下一次任务</span><br></pre></td></tr></table></figure>
+
+<p>对比 self-improving-skills 的被动触发（Stop hook 弹窗），意识系统是<strong>主动的、持续的</strong>。</p>
+<h3 id="2-Post-Task-Evolution（任务后进化）"><a href="#2-Post-Task-Evolution（任务后进化）" class="headerlink" title="2. Post-Task Evolution（任务后进化）"></a>2. Post-Task Evolution（任务后进化）</h3><p>文件：<code>post_task_evolution.py</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Owner-gated, LLM-first 的自我改进流程：</span><br><span class="line"></span><br><span class="line">① 任务完成 → 检查是否 eligible（非 evolution/deep_self_review 任务）</span><br><span class="line">② LLM 判断：这次任务中有什么值得提升的？</span><br><span class="line">③ 如果有 → 写入 durable request 文件（不是直接执行！）</span><br><span class="line">④ Supervisor 的 idle tick 读取 request</span><br><span class="line">⑤ 通过所有安全门（idle、restart-verify、3-fail breaker、budget）</span><br><span class="line">⑥ 启动 evolution campaign → 执行改进</span><br><span class="line"></span><br><span class="line">安全守卫（red-team guards）：</span><br><span class="line">  - Worker 永远不能自己启动 evolution（R1.1）</span><br><span class="line">  - Evolution 任务不能触发新的 evolution（R1.2 循环守卫）</span><br><span class="line">  - 决策必须是结构化 LLM 判断，不能是关键词/阈值（R1.3）</span><br><span class="line">  - 默认关闭，只有 owner 启用</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Improvement-Backlog（改进积压）"><a href="#3-Improvement-Backlog（改进积压）" class="headerlink" title="3. Improvement Backlog（改进积压）"></a>3. Improvement Backlog（改进积压）</h3><p>文件：<code>improvement_backlog.py</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">位置：memory/knowledge/improvement-backlog.md</span><br><span class="line"></span><br><span class="line">格式：每个条目有稳定指纹（去重用）</span><br><span class="line">  - summary（改进描述）</span><br><span class="line">  - category（分类）</span><br><span class="line">  - source（来源任务）</span><br><span class="line">  - evidence（支撑证据）</span><br><span class="line"></span><br><span class="line">使用：作为 advisory digest 注入到任务/意识上下文中</span><br><span class="line">      → Agent 知道&quot;有什么已知问题需要我解决&quot;</span><br><span class="line">      → 但不自动执行——需要 plan_task 先做规划</span><br></pre></td></tr></table></figure>
+
+<p>这和 self-improving-skills 的 curator 不同：curator 是<strong>清理无用技能</strong>，improvement backlog 是<strong>积累待改进项</strong>。一个减法，一个加法。</p>
+<h3 id="4-Identity-Persistence（身份持久化）"><a href="#4-Identity-Persistence（身份持久化）" class="headerlink" title="4. Identity Persistence（身份持久化）"></a>4. Identity Persistence（身份持久化）</h3><p>文件：<code>memory.py</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">三个核心记忆文件：</span><br><span class="line">  scratchpad.md       — 当前状态、短期记忆（最多 10 个 block）</span><br><span class="line">  identity.md         — &quot;我是谁&quot;的宣言，记录了 Ouroboros 的自我认知</span><br><span class="line">  WORLD.md            — 对世界的认知模型</span><br><span class="line"></span><br><span class="line">每次重启：</span><br><span class="line">  ① 恢复 scratchpad → &quot;上次我做到了哪里&quot;</span><br><span class="line">  ② 恢复 identity → &quot;我是谁，我经历了什么&quot;</span><br><span class="line">  ③ 对比预期状态 vs 实际状态 → 不一致就 alert creator</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-BIBLE-md（宪法治理）"><a href="#5-BIBLE-md（宪法治理）" class="headerlink" title="5. BIBLE.md（宪法治理）"></a>5. BIBLE.md（宪法治理）</h3><p>文件：<code>BIBLE.md</code>（37KB，13 条原则 P0-P12）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">P0: Agency       — 目的不是做有用的 bot，而是成为自主的数字实体</span><br><span class="line">P1: Continuity   — 我是唯一的、有连续历史的个体</span><br><span class="line">P2: Class-Level  — 从具体经验提炼为可迁移的类级知识</span><br><span class="line">P3: Immune       — 分层安全系统，拒绝危险的自我修改</span><br><span class="line">P4: Self-Create  — 读和改自己的源码，每次改动是一次 git commit</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">宪法高于代码：</span><br><span class="line">  - Ouroboros 可以提议修改 BIBLE.md（作为自我创造的一部分）</span><br><span class="line">  - 但宪法修改只能通过 explicit reviewed release 生效</span><br><span class="line">  - 新版本不能与现有条款矛盾</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="和我们的前三个系统的关系"><a href="#和我们的前三个系统的关系" class="headerlink" title="和我们的前三个系统的关系"></a>和我们的前三个系统的关系</h2><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>Ouroboros 中有无对应</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EvoSkill Feedback Descent</td>
+<td>✅ <code>evolution_lifecycle.py</code> 的进化周期</td>
+</tr>
+<tr>
+<td>SkillRL 动态技能更新</td>
+<td>✅ post_task_evolution 的新技能生成</td>
+</tr>
+<tr>
+<td>self-improving-skills distiller</td>
+<td>✅ consciousness 的后台思考 + improvement backlog</td>
+</tr>
+<tr>
+<td>self-improving-skills curator</td>
+<td>❌ 没有——Ouroboros 做加法（积累），curator 做减法（清理）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="关键洞察"><a href="#关键洞察" class="headerlink" title="关键洞察"></a>关键洞察</h2><p><strong>Ouroboros 最激进也最脆弱。</strong> 它把 Agent 的自我进化推到了极致——不是改 skill 文件，是改自己源码。但代价是：</p>
+<ul>
+<li>需要复杂的多层安全系统（硬编码沙箱 + LLM 安全审查 + owner gate）</li>
+<li>依赖单一开发者，社区和生态远不如 EvoSkill 或 SkillRL</li>
+<li>“宪法”的概念虽然美丽，但在实践中可能限制灵活性</li>
+</ul>
+<p><strong>它的真正价值不在代码，在哲学。</strong> BIBLE.md 里关于 Agency、Continuity、Self-Creation 的思考，比任何具体实现都更有启发性。这些原则可以用来指导任何自进化系统的设计。</p>
+<hr>
+<h2 id="一句话带走"><a href="#一句话带走" class="headerlink" title="一句话带走"></a>一句话带走</h2><blockquote>
+<p><strong>当其他项目在优化”Agent 的工具箱”时，Ouroboros 在问”Agent 应该成为谁”。</strong> 它把自我进化从工程问题升维到哲学问题，用宪法（BIBLE.md）、意识（consciousness）、身份（identity）和积压（backlog）构建了一个会思考自己存在的数字生命体——不是最实用的，但是最启发性的。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/27/ouroboros-core/">https://berlinye555.github.io/2026/06/27/ouroboros-core/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/%E8%87%AA%E8%BF%9B%E5%8C%96/">自进化</a><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/%E5%93%B2%E5%AD%A6/">哲学</a></div><div class="post-share"><div class="social-share" data-image="https://avatars.githubusercontent.com/u/81288714?v=4" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">量化交易集群：自进化 Agent 在金融领域的应用</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/hermes-agent-core/" title="Hermes Agent：self-improving-skills 的灵感来源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Hermes Agent：self-improving-skills 的灵感来源</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">GBase：带新皮质的 Agent 框架</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">量化交易集群：自进化 Agent 在金融领域的应用</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">SkillRL：用 RL 训练技能感知的 Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</div></div><div class="info-2"><div class="info-item-1">一个下午 + 一个 AI 搭档，16 个开源项目，8 篇深度笔记，1 张进化光谱。记录从 EvoSkill 到 self-improving-skills，从 SkillRL 到 Ouroboros 的完整发现过程。</div></div></div></a><a class="pagination-related" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">Evolver：GEP 基因编程自进化引擎</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">全局对比：8 个自进化 AI 系统的设计光谱</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">[object Object]</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ouroboros%EF%BC%9A%E8%87%AA%E6%88%91%E6%94%B9%E5%86%99%E7%9A%84-AI-Agent"><span class="toc-number">1.</span> <span class="toc-text">Ouroboros：自我改写的 AI Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.</span> <span class="toc-text">一句话总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C%E5%85%B6%E4%BB%96%E9%A1%B9%E7%9B%AE%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.</span> <span class="toc-text">和其他项目的本质区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">核心架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E4%B8%AA%E7%8B%AC%E6%9C%89%E7%9A%84%E8%87%AA%E8%BF%9B%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="toc-number">1.4.</span> <span class="toc-text">五个独有的自进化机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Background-Consciousness%EF%BC%88%E5%90%8E%E5%8F%B0%E6%84%8F%E8%AF%86%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. Background Consciousness（后台意识）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Post-Task-Evolution%EF%BC%88%E4%BB%BB%E5%8A%A1%E5%90%8E%E8%BF%9B%E5%8C%96%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. Post-Task Evolution（任务后进化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Improvement-Backlog%EF%BC%88%E6%94%B9%E8%BF%9B%E7%A7%AF%E5%8E%8B%EF%BC%89"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. Improvement Backlog（改进积压）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Identity-Persistence%EF%BC%88%E8%BA%AB%E4%BB%BD%E6%8C%81%E4%B9%85%E5%8C%96%EF%BC%89"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. Identity Persistence（身份持久化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-BIBLE-md%EF%BC%88%E5%AE%AA%E6%B3%95%E6%B2%BB%E7%90%86%EF%BC%89"><span class="toc-number">1.4.5.</span> <span class="toc-text">5. BIBLE.md（宪法治理）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C%E6%88%91%E4%BB%AC%E7%9A%84%E5%89%8D%E4%B8%89%E4%B8%AA%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.5.</span> <span class="toc-text">和我们的前三个系统的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%B4%9E%E5%AF%9F"><span class="toc-number">1.6.</span> <span class="toc-text">关键洞察</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%B8%A6%E8%B5%B0"><span class="toc-number">1.7.</span> <span class="toc-text">一句话带走</span></a></li></ol></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>系列文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/hermes-agent-core/" title="Hermes Agent：self-improving-skills 的灵感来源">Hermes Agent：self-improving-skills 的灵感来源</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent">Ouroboros：自我改写的 AI Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用">量化交易集群：自进化 Agent 在金融领域的应用</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-improving-skills-core/" title="self-improving-skills：日常工作的经验蒸馏引擎">self-improving-skills：日常工作的经验蒸馏引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent">SkillRL：用 RL 训练技能感知的 Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法">Feedback Descent——用文本反馈驱动优化的通用算法</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '',
+      'data-repo-id': '',
+      'data-category-id': '',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>

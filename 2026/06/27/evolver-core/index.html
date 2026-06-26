@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Evolver：GEP 基因编程自进化引擎 | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evolver：GEP 基因编程自进化引擎">
+<meta property="og:url" content="https://berlinye555.github.io/2026/06/27/evolver-core/index.html">
+<meta property="og:site_name" content="Berlinye">
+<meta property="og:description" content="自进化 AI 系统深度研究系列文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/81288714?v=4">
+<meta property="article:published_time" content="2026-06-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-26T17:35:39.910Z">
+<meta property="article:author" content="Berlinye">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="基因编程">
+<meta property="article:tag" content="自进化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://avatars.githubusercontent.com/u/81288714?v=4"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Evolver：GEP 基因编程自进化引擎",
+  "url": "https://berlinye555.github.io/2026/06/27/evolver-core/",
+  "image": "https://avatars.githubusercontent.com/u/81288714?v=4",
+  "datePublished": "2026-06-26T16:00:00.000Z",
+  "dateModified": "2026-06-26T17:35:39.910Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Berlinye",
+      "url": "https://Berlinye555.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://berlinye555.github.io/2026/06/27/evolver-core/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Evolver：GEP 基因编程自进化引擎',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/nanshen-full.css"><link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.staticfile.net/fancyapps-ui/5.0.33/fancybox/fancybox.min.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">Evolver：GEP 基因编程自进化引擎</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Evolver：GEP 基因编程自进化引擎</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-26T17:35:39.910Z" title="更新于 2026-06-27 01:35:39">2026-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/">研究笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Evolver：GEP-基因编程自进化引擎"><a href="#Evolver：GEP-基因编程自进化引擎" class="headerlink" title="Evolver：GEP 基因编程自进化引擎"></a>Evolver：GEP 基因编程自进化引擎</h1><blockquote>
+<p>来源：<code>agent-frameworks/evolver/</code>，论文 arXiv 2604.15097<br>团队：EvoMap<br>语言：JavaScript&#x2F;Node.js，有自己的 EvoMap Hub 生态</p>
+</blockquote>
+<hr>
+<h2 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h2><p>用**基因（Gene）+ 胶囊（Capsule）**替代 SKILL.md 文件作为进化的载体——Gene 定义”该做什么改进”，Capsule 记录”改进后发生了什么”。加上变异（mutation）、表观遗传（epigenetics）、固化（solidify）等生物学隐喻，构建了一套完整的基因编程进化系统。</p>
+<hr>
+<h2 id="核心创新：用生物学隐喻替代文件系统"><a href="#核心创新：用生物学隐喻替代文件系统" class="headerlink" title="核心创新：用生物学隐喻替代文件系统"></a>核心创新：用生物学隐喻替代文件系统</h2><p>所有其他项目都把”技能&#x2F;知识”存为文件：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>存储方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EvoSkill</td>
+<td><code>.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+</tr>
+<tr>
+<td>self-improving-skills</td>
+<td><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></td>
+</tr>
+<tr>
+<td>SkillRL</td>
+<td><code>memory_data/&lt;task&gt;/claude_style_skills.json</code></td>
+</tr>
+<tr>
+<td><strong>Evolver</strong></td>
+<td><strong>Gene + Capsule 对象（内存 + 磁盘 + Hub 同步）</strong></td>
+</tr>
+</tbody></table>
+<p>Evolver 不写技能文件——它创建<strong>基因</strong>和<strong>胶囊</strong>。</p>
+<hr>
+<h2 id="Gene（基因）结构"><a href="#Gene（基因）结构" class="headerlink" title="Gene（基因）结构"></a>Gene（基因）结构</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Gene</span> &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="string">&quot;gen_xxx&quot;</span>,                    <span class="comment">// 唯一 ID</span></span><br><span class="line">  <span class="attr">category</span>: <span class="string">&quot;repair&quot;</span>|<span class="string">&quot;optimize&quot;</span>|<span class="string">&quot;innovate&quot;</span>|<span class="string">&quot;explore&quot;</span>,</span><br><span class="line">  <span class="attr">signals_match</span>: [],                <span class="comment">// 触发信号列表</span></span><br><span class="line">  <span class="attr">strategy</span>: [],                     <span class="comment">// 改进步骤</span></span><br><span class="line">  <span class="attr">validation</span>: [],                   <span class="comment">// 验证标准</span></span><br><span class="line">  <span class="attr">constraints</span>: &#123;                    <span class="comment">// 安全约束</span></span><br><span class="line">    <span class="attr">max_files</span>: <span class="number">20</span>,</span><br><span class="line">    <span class="attr">forbidden_paths</span>: [<span class="string">&#x27;.git&#x27;</span>, <span class="string">&#x27;node_modules&#x27;</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">preconditions</span>: [],                <span class="comment">// 前置条件</span></span><br><span class="line">  <span class="attr">summary</span>: <span class="string">&quot;&quot;</span>,                      <span class="comment">// 一句话描述</span></span><br><span class="line">  <span class="attr">epigenetic_marks</span>: [],             <span class="comment">// 表观遗传标记（环境抑制/激活）</span></span><br><span class="line">  <span class="attr">learning_history</span>: [],             <span class="comment">// 基因的学习历史</span></span><br><span class="line">  <span class="attr">anti_patterns</span>: [],                <span class="comment">// 反模式（已知的失败方式）</span></span><br><span class="line">  <span class="attr">routing_hint</span>: &#123; tier, reasoning_level &#125;,  <span class="comment">// 路由提示</span></span><br><span class="line">  <span class="attr">tool_policy</span>: &#123; allow_only, deny, severity &#125; <span class="comment">// 工具策略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对比 SKILL.md:</p>
+<ul>
+<li>SKILL.md: 非结构化的 markdown 文本，靠 LLM 理解</li>
+<li>Gene: 严格结构化的 JSON 对象，程序化验证和路由</li>
+</ul>
+<h2 id="Capsule（胶囊）结构"><a href="#Capsule（胶囊）结构" class="headerlink" title="Capsule（胶囊）结构"></a>Capsule（胶囊）结构</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Capsule</span> &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="string">&quot;cap_xxx&quot;</span>,</span><br><span class="line">  <span class="attr">trigger</span>: [],           <span class="comment">// 什么触发了这次尝试</span></span><br><span class="line">  <span class="attr">gene</span>: &lt;<span class="title class_">Gene</span>&gt;,          <span class="comment">// 引用的基因</span></span><br><span class="line">  <span class="attr">summary</span>: <span class="string">&quot;&quot;</span>,           <span class="comment">// 尝试结果摘要</span></span><br><span class="line">  <span class="attr">confidence</span>: <span class="number">0.75</span>,      <span class="comment">// 置信度</span></span><br><span class="line">  <span class="attr">blast_radius</span>: &#123;        <span class="comment">// 影响范围</span></span><br><span class="line">    <span class="attr">files</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="attr">lines</span>: <span class="number">45</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">outcome</span>: &#123;             <span class="comment">// 结果</span></span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;success&quot;</span>|<span class="string">&quot;failed&quot;</span>,</span><br><span class="line">    <span class="attr">score</span>: <span class="number">0.85</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">success_streak</span>: <span class="number">3</span>,     <span class="comment">// 连续成功次数</span></span><br><span class="line">  <span class="attr">execution_trace</span>: [],   <span class="comment">// 执行轨迹</span></span><br><span class="line">  <span class="attr">strategy</span>: [],          <span class="comment">// 实际采用的策略</span></span><br><span class="line">  <span class="attr">derivation_tokens</span>: &#123;   <span class="comment">// Token 成本</span></span><br><span class="line">    input_tokens, output_tokens, total_tokens</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">a2a</span>: &#123;                 <span class="comment">// Agent-to-Agent 广播</span></span><br><span class="line">    <span class="attr">eligible_to_broadcast</span>: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Gene &#x3D; 假设（”我们应该这样改进”），Capsule &#x3D; 实验（”我们试了，结果是…”）。</strong></p>
+<p>这和 EvoSkill Feedback Descent 的 <code>Proposer → Evaluator → 保留/丢弃</code> 完全对应：</p>
+<ul>
+<li>Gene ≈ Proposer 的输出（候选改进）</li>
+<li>Capsule ≈ Evaluator 的结果（带证据的判断）</li>
+</ul>
+<hr>
+<h2 id="进化管线"><a href="#进化管线" class="headerlink" title="进化管线"></a>进化管线</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Signal Detection（信号检测）</span><br><span class="line">  → evolver-session-end.js 扫描 transcript</span><br><span class="line">  → 匹配已知 Gene 的 signals_match</span><br><span class="line">  → 触发 evolution pipeline</span><br><span class="line"></span><br><span class="line">Evolution Pipeline（进化管道）:</span><br><span class="line">  collect → enrich → select → dispatch → solidify</span><br><span class="line">    收集      富化      选择      分发       固化</span><br><span class="line"></span><br><span class="line">solidify（固化）:</span><br><span class="line">  ① 沙箱执行验证</span><br><span class="line">  ② 结果打包为 Capsule</span><br><span class="line">  ③ 更新 Gene 的 epigenetic_marks（表观标记）</span><br><span class="line">  ④ 同步到 EvoMap Hub</span><br><span class="line">  ⑤ 写 memory graph</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="表观遗传（Epigenetics）"><a href="#表观遗传（Epigenetics）" class="headerlink" title="表观遗传（Epigenetics）"></a>表观遗传（Epigenetics）</h2><p>Evolver 引入了一个其他项目都没有的概念：<strong>表观遗传标记</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">epigenetic_marks: [</span><br><span class="line">  &#123; type: &quot;suppress&quot;, reason: &quot;too_expensive&quot;, until: &quot;...&quot; &#125;,</span><br><span class="line">  &#123; type: &quot;activate&quot;, reason: &quot;high_success_rate&quot; &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基因不变（Gene 的 strategy&#x2F;validation 不改），但可以被”标记”为抑制&#x2F;激活</li>
+<li>类似于生物的 DNA 甲基化——基因序列没变，但表达变了</li>
+<li>这解决了其他系统的一个问题：一条技能偶尔不适用 vs 永远不适用，如何区分？用标记而非删除</li>
+</ul>
+<hr>
+<h2 id="和-self-improving-skills-的对比"><a href="#和-self-improving-skills-的对比" class="headerlink" title="和 self-improving-skills 的对比"></a>和 self-improving-skills 的对比</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Evolver</th>
+<th>self-improving-skills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>进化载体</strong></td>
+<td>Gene + Capsule（结构化 JSON）</td>
+<td>SKILL.md（非结构化 markdown）</td>
+</tr>
+<tr>
+<td><strong>验证方式</strong></td>
+<td>沙箱执行 + Capsule 评分</td>
+<td>格式校验 + 人工判断</td>
+</tr>
+<tr>
+<td><strong>状态管理</strong></td>
+<td>epigenetic_marks（抑制&#x2F;激活）</td>
+<td>active → stale → archived</td>
+</tr>
+<tr>
+<td><strong>知识共享</strong></td>
+<td>EvoMap Hub（A2A 广播）</td>
+<td>Team repo（origin-hash sync）</td>
+</tr>
+<tr>
+<td><strong>安全</strong></td>
+<td>沙箱执行 + constraints</td>
+<td>备份 + 回滚</td>
+</tr>
+<tr>
+<td><strong>生态</strong></td>
+<td>有 Hub 市场、自动任务撮合（ATP）</td>
+<td>CLI 插件、手动命令</td>
+</tr>
+<tr>
+<td><strong>成熟度</strong></td>
+<td>论文支撑，商业生态</td>
+<td>个人项目，日用可靠</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="最有价值的概念：Gene-Capsule-分离"><a href="#最有价值的概念：Gene-Capsule-分离" class="headerlink" title="最有价值的概念：Gene + Capsule 分离"></a>最有价值的概念：Gene + Capsule 分离</h2><p>把”改进建议”和”改进结果”分开是两个正交的数据结构，这是 Evolver 最值得学走的设计。</p>
+<p>在 self-improving-skills 里，两者是混在一起的——SKILL.md 既是”建议”也是”经过验证的知识”。如果能引入 Gene&#x2F;Capsule 分离：</p>
+<ul>
+<li>Gene &#x3D; distiller 提出的候选改进</li>
+<li>Capsule &#x3D; 使用该技能后的效果记录（从 usage_store 的 use&#x2F;view&#x2F;patch 统计推导）</li>
+<li>Epigenetic marks &#x3D; 根据 Capsule 的 outcome 自动调整 Gene 的激活状态</li>
+</ul>
+<hr>
+<h2 id="一句话带走"><a href="#一句话带走" class="headerlink" title="一句话带走"></a>一句话带走</h2><blockquote>
+<p><strong>不用 markdown 文件，用结构化的基因（Gene）和胶囊（Capsule）来承载 Agent 的进化知识。</strong> Gene 是假设，Capsule 是实验证据。表观遗传标记（epigenetics）让基因可以在不删除的情况下被抑制或激活。这是一套比 SKILL.md 更严谨、更可程序化操作的进化载体设计。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/27/evolver-core/">https://berlinye555.github.io/2026/06/27/evolver-core/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/%E8%87%AA%E8%BF%9B%E5%8C%96/">自进化</a><a class="post-meta__tags" href="/tags/Agent/">Agent</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E5%9B%A0%E7%BC%96%E7%A8%8B/">基因编程</a></div><div class="post-share"><div class="social-share" data-image="https://avatars.githubusercontent.com/u/81288714?v=4" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">GBase：带新皮质的 Agent 框架</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Feedback Descent——用文本反馈驱动优化的通用算法</div></div><div class="info-2"><div class="info-item-1">133 行纯 Python 实现的通用文本优化算法，源自 EvoSkill 项目核心</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</div></div><div class="info-2"><div class="info-item-1">一个下午 + 一个 AI 搭档，16 个开源项目，8 篇深度笔记，1 张进化光谱。记录从 EvoSkill 到 self-improving-skills，从 SkillRL 到 Ouroboros 的完整发现过程。</div></div></div></a><a class="pagination-related" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">Ouroboros：自我改写的 AI Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">量化交易集群：自进化 Agent 在金融领域的应用</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">GBase：带新皮质的 Agent 框架</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">SkillRL：用 RL 训练技能感知的 Agent</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">全局对比：8 个自进化 AI 系统的设计光谱</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/81288714?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">[object Object]</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Evolver%EF%BC%9AGEP-%E5%9F%BA%E5%9B%A0%E7%BC%96%E7%A8%8B%E8%87%AA%E8%BF%9B%E5%8C%96%E5%BC%95%E6%93%8E"><span class="toc-number">1.</span> <span class="toc-text">Evolver：GEP 基因编程自进化引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.</span> <span class="toc-text">一句话总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0%EF%BC%9A%E7%94%A8%E7%94%9F%E7%89%A9%E5%AD%A6%E9%9A%90%E5%96%BB%E6%9B%BF%E4%BB%A3%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.</span> <span class="toc-text">核心创新：用生物学隐喻替代文件系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gene%EF%BC%88%E5%9F%BA%E5%9B%A0%EF%BC%89%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">Gene（基因）结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Capsule%EF%BC%88%E8%83%B6%E5%9B%8A%EF%BC%89%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">Capsule（胶囊）结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E5%8C%96%E7%AE%A1%E7%BA%BF"><span class="toc-number">1.5.</span> <span class="toc-text">进化管线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E8%A7%82%E9%81%97%E4%BC%A0%EF%BC%88Epigenetics%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">表观遗传（Epigenetics）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8C-self-improving-skills-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">1.7.</span> <span class="toc-text">和 self-improving-skills 的对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E6%9C%89%E4%BB%B7%E5%80%BC%E7%9A%84%E6%A6%82%E5%BF%B5%EF%BC%9AGene-Capsule-%E5%88%86%E7%A6%BB"><span class="toc-number">1.8.</span> <span class="toc-text">最有价值的概念：Gene + Capsule 分离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%B8%A6%E8%B5%B0"><span class="toc-number">1.9.</span> <span class="toc-text">一句话带走</span></a></li></ol></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>系列文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/hermes-agent-core/" title="Hermes Agent：self-improving-skills 的灵感来源">Hermes Agent：self-improving-skills 的灵感来源</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/ouroboros-core/" title="Ouroboros：自我改写的 AI Agent">Ouroboros：自我改写的 AI Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/quant-trading-cluster/" title="量化交易集群：自进化 Agent 在金融领域的应用">量化交易集群：自进化 Agent 在金融领域的应用</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-improving-skills-core/" title="self-improving-skills：日常工作的经验蒸馏引擎">self-improving-skills：日常工作的经验蒸馏引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/skillrl-core/" title="SkillRL：用 RL 训练技能感知的 Agent">SkillRL：用 RL 训练技能感知的 Agent</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法">Feedback Descent——用文本反馈驱动优化的通用算法</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/gbase-core/" title="GBase：带新皮质的 Agent 框架">GBase：带新皮质的 Agent 框架</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/global-comparison/" title="全局对比：8 个自进化 AI 系统的设计光谱">全局对比：8 个自进化 AI 系统的设计光谱</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '',
+      'data-repo-id': '',
+      'data-category-id': '',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>
