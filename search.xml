@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Feedback Descent——用文本反馈驱动优化的通用算法</title>
+    <url>/2026/06/27/feedback-descent/</url>
+    <content><![CDATA[Feedback Descent：用文本反馈驱动优化的通用算法
+来源：EvoSkill 项目 src/feedback_descent.py，源自论文 arXiv 2511.07919代码量：133 行纯 Python，零外部依赖
+
+
+一句话总结不用标量奖励（scalar reward），用结构化文本反馈 + 成对比较来驱动优化。每次比较产生一段文字解释”为什么 A 比 B 好”，这些文字累积起来指导下一轮改进方向。
+
+算法核心初始化:  best ← 初始方案  feedback_history ← []循环 t = 1 → max_iterations:  ① Proposer: candidate ← propose(best, feedback_history)  ② Evaluator: (偏好, 理由) ← evaluate(best, candidate)  ③ 记录: feedback_history.append((candidate, 理由))  ④ if 候选更好:       best ← candidate       feedback_history ← []    # 关键：清空历史     else:       no_improvement_count++       if no_improvement_count &gt;= limit: break返回 best
+
+三个设计关键1. 改进后清空反馈历史候选胜出 → 之前积累的反馈和当前 best 已经无关 → 清空重启。避免旧信息误导下一轮。
+2. 失败时保留反馈候选失败 → 这条反馈仍然有价值（告诉 proposer 什么方向不行）→ 继续累积。下一轮 proposer 能看到”前面试过的路走不通”。
+3. 基于成对比较而非绝对打分不要求 Evaluator 给出 0-1 分数，只要求”这两个哪个更好，为什么”。成对比较对人类和 LLM 都更自然、更可靠。
+
+代码骨架@dataclassclass EvaluationResult:    preference_for_candidate: bool    rationale: str                  # 文字解释，不是数字@dataclassclass FeedbackEntry(Generic[T]):    candidate: T    rationale: strclass Proposer(Protocol[T]):       # Protocol = 鸭子类型    def generate_initial(self, problem: str) -&gt; T: ...    def propose(self, current_best: T, feedback_history: List[FeedbackEntry[T]]) -&gt; T: ...class Evaluator(Protocol[T]):    def evaluate(self, current_best: T, candidate: T) -&gt; EvaluationResult: ...class FeedbackDescent(Generic[T]):    def __init__(self, proposer, evaluator, max_iterations=10, no_improvement_limit=3): ...    def run(self, problem: str) -&gt; FeedbackDescentResult[T]: ...
+
+
+Proposer 和 Evaluator 是 Protocol（结构化鸭子类型），不是 ABC
+Generic[T] 意味着 T 可以是任何东西——一段 prompt、一个技能文件、一篇文章、一份设计方案
+FeedbackDescent 本身不依赖 LLM、不依赖文件系统，纯算法
+
+
+EvoSkill 中的应用EvoSkill 的 SelfImprovingLoop 比 Feedback Descent 更复杂，但骨架是一样的：
+
+
+
+Feedback Descent 角色
+EvoSkill 中的实现
+
+
+
+T（被优化的东西）
+Agent Program（system prompt + skills 文件集合）
+
+
+Proposer
+Skill Proposer &#x2F; Prompt Proposer（LLM 分析失败，提议改动）
+
+
+Evaluator
+在 val 集上跑分：正确数&#x2F;总题数
+
+
+feedback_history
+.evoskill/feedback_history.md（markdown 文件持久化）
+
+
+「清空历史」时机
+新 variant 进入 frontier 时清空
+
+
+EvoSkill 额外加了：
+
+种群机制（Frontier）：不只保留 best，保留 top 3
+Proposer fallback：上下文太长 → 截断重试 → 最后用单条最短失败兜底
+类别轮询抽样：每轮从不同类别取题，避免过拟合
+
+
+和 self-improving-skills 的关系
+
+
+
+Feedback Descent
+self-improving-skills
+
+
+
+触发
+算法循环驱动
+Stop hook 弹窗
+
+
+Proposer
+LLM 分析 benchmark 失败
+LLM 读 transcript
+
+
+Evaluator
+val 集量化跑分
+用户主观判断
+
+
+反馈记录
+feedback_history markdown
+无（口头确认即结束）
+
+
+种群
+Frontier top 3
+无（单技能演化）
+
+
+self-improving-skills 如果加一个 Evaluator 环节，就可以变成 human-in-the-loop 的 Feedback Descent。
+
+潜在应用场景不只限于 Agent 技能优化，任何**”靠文本反馈迭代改进”**的场景都能用：
+
+
+
+场景
+T 的类型
+Proposer
+Evaluator
+
+
+
+Prompt 优化
+系统提示词
+LLM 生成新版本
+A&#x2F;B 测试胜率
+
+
+代码生成
+代码片段
+LLM 改写
+测试通过率
+
+
+文档改进
+文档文本
+作者改写
+读者理解度测试
+
+
+谈判策略
+策略描述
+分析对手反应
+模拟谈判结果
+
+
+课程设计
+教学大纲
+教师调整
+学生测验成绩
+
+
+
+一句话带走
+失败时累积反馈指导方向，成功时清空历史重新出发。用成对比较代替绝对评分，用文本理由代替数字信号。 133 行代码，比大多数 prompt 都短。
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>算法</tag>
+        <tag>EvoSkill</tag>
+        <tag>自进化</tag>
+      </tags>
+  </entry>
+</search>
