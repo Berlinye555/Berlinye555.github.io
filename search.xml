@@ -151,4 +151,320 @@ LLM 改写
         <tag>自进化</tag>
       </tags>
   </entry>
+  <entry>
+    <title>自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</title>
+    <url>/2026/06/27/self-evolving-ai-research-journal/</url>
+    <content><![CDATA[自进化 AI 系统深度对比研究
+2026 年 6 月 26 日，一个下午 + 一个 AI 搭档，16 个开源项目，8 篇深度笔记，1 张进化光谱。
+
+
+怎么开始的我在 GitHub 上收集了 16 个和”AI Agent 自我进化”相关的开源项目，分四类克隆到本地：
+
+
+
+分类
+项目
+
+
+
+Agent 框架
+EvoSkill、SkillRL、evolver、gbase、hermes-agent、agent-learn
+
+
+系统工具
+ouroboros、genesis-agent、jam、friday-showcase、TG-HELPER
+
+
+量化交易
+AgentQuant、ClawQuant、fincrew、open-quant-agent、Agent-Trading-Arena
+
+
+论文
+FactorMiner、AQAA、EvolveMem 等
+
+
+同时我还在用 self-improving-skills ——一个 Claude Code 插件，能在每次完成复杂工作后自动提醒”要不要把这次的经验蒸馏成可复用技能”。
+我想搞清楚：这些项目各自的”自进化”到底是怎么实现的？哪个设计最值得学走？
+
+第一个发现：两条不同的路线最先对比的是 EvoSkill 和 self-improving-skills。它们表面上做一样的事——从 Agent 的工作中提取可复用技能——但机制完全不同。
+
+
+
+
+EvoSkill
+self-improving-skills
+
+
+
+触发
+手动跑 benchmark
+Stop hook 自动弹窗
+
+
+评估
+val 集量化跑分
+用户主观判断
+
+
+产物
+新的 Agent Program
+SKILL.md 文件
+
+
+进一步的源码分析发现：skill-distiller 子 agent 的本质，是让 Claude Code 自己写 SKILL.md——和 EvoSkill 调 Claude Code 子进程写技能文件是一模一样的事。区别在于 EvoSkill 加了一个 benchmark 评估环节，self-improving-skills 加了 curator 维护环节。
+两条路线是互补的，不是竞品。 一个做”评估驱动的自动化优化”，一个做”经验驱动的日常积累”。
+
+一个让我停下来读了三遍的故事读 self-improving-skills 的源码时，我发现它的核心文件 analyze_turn.py 顶部有一段注释：
+
+Design notes — every one of these avoids a confirmed failure mode of the sibling dev-log hook (which never fired across 396 real transcripts)
+
+dev-log 是同一个作者的另一个 Claude Code 插件，设计目标类似——检测复杂工作然后触发。但它有个问题：在 396 个真实 session 中，一次都没触发过。
+根因分析发现了 7 个致命 bug：
+
+grep 了 &quot;tool&quot;:&quot;Edit&quot;，但 transcript JSON 里真正的 key 是 &quot;name&quot;:&quot;Edit&quot;
+用子串匹配判断”是否已蒸馏”，但插件自己的名字就包含匹配词——永远自触发
+block 决策输出到 stderr + exit 2，但 Claude Code 读的是 stdout + exit 0
+触发条件只覆盖”编译错误修复”——396 个 session 里用户调编译工具只有 12 次
+阈值用”关键词出现 5 次”而不是累积工作量
+生成的技能用”防御式”描述（”MUST ALWAYS…”），陌生场景不触发
+没有任何 fail-safe——出错就报错，不会降级
+
+于是这 396 个 session 全部静默跳过，用户完全不知道这个插件存在。
+self-improving-skills 就是在这具尸体上重建的。 每个设计决策都对应一个 dev-log 的致命 bug。analyze_turn.py 的 409 行代码里有 4 层 fail-safe，任何异常都 fallback 到 approve——“一个损坏的分析器永远不能卡住用户的会话”。
+
+核心发现：Feedack Descent 算法在 EvoSkill 的源码里发现了一个独立文件 feedback_descent.py，只有 133 行。它实现了论文 arXiv 2511.07919 的 Feedback Descent 算法：
+初始化 best = 初始方案循环：  Proposer 根据 best + 历史反馈 → 生成候选  Evaluator 对比候选 vs best → 给出文字理由  如果候选更好 → 替换 best，清空反馈历史  如果连续 k 轮没改进 → 停止
+
+三个关键设计：
+
+失败时保留反馈：告诉 proposer 什么方向不行，历史反馈越积越多
+成功时清空历史：之前的反馈和旧 best 已经无关，清空重启
+成对比较替代绝对打分：对 LLM 更友好，结果更可靠
+
+133 行纯 Python，零外部依赖。不只限于 Agent 技能优化——prompt 优化、代码审查规则、文档改进、任何”文本反馈驱动的迭代优化”都能用。
+
+逐个深读：8 个系统的核心设计花了一个下午逐个读源码，每个系统提取了最核心的设计。
+SkillRL — 技能和模型协同进化JSON 技能库（SKILLBANK）注入到 RL 训练的每一步 prompt 中。验证失败时 o3 自动分析轨迹，生成新技能（dyn_NNN）加入库。技能不改变模型参数，但通过影响 rollout 来引导策略梯度方向。形成了 “更好的技能 → 更好的 rollout → 更好的梯度 → 更好的模型 → 发现新失败 → 生成新技能” 的正反馈循环。
+ouroboros — “Agent 不是工具，是数字生命”有一个 37KB 的宪法文件（BIBLE.md），13 条原则（P0-P12）。P0 开篇就是 “Ouroboros is not a tool, but a becoming personality”。代码里实现了后台意识线程（30s-2h 间隔自主思考）、身份持久化（identity.md + scratchpad）、改进积压（improvement backlog），以及真正能改自己源码的自我修改能力——用硬编码沙箱 + LLM 安全审查 + owner gate 三层保护。
+evolver — 用基因和胶囊替代 SKILL.md所有其他系统都把技能存为 markdown 文件。Evolver 用结构化的 Gene（基因，定义改进）+ Capsule（胶囊，记录实验结果）替代。Gene 有 epigenetic_marks（表观遗传标记）——可以在不删除的情况下抑制或激活某个基因。这比”删掉不用的技能文件”优雅得多。
+gbase — 三层认知沉淀经验（what happened）→ 概念（why it happened）→ 策略（what to do about it），逐层升维抽象。质量门控管道用三个独立 Agent 实例（Hammer 构建 + Ink 审查 + Judge 裁决）做自动化代码审查。不过核心的 RSI 引擎目前是空壳。
+hermes-agent — self-improving-skills 的本尊Nous Research 的全栈 Agent 平台。定义了”Footprint Ladder”：扩展现有代码 → CLI+Skill → Service-gated tool → Plugin → MCP → 新 core tool（最后手段）。每个新增 core tool 都会在每次 API 调用中发送，所以”核心窄，能力在边缘”。self-improving-skills 移植了它最核心的技能蒸馏 + curator 循环。
+量化交易集群 — 自进化最自然的应用领域5 个项目覆盖了从学术 Self-Play（Agent-Trading-Arena，EMNLP 2025 + ICML 2026）到因子研究管线（Robin，7 步流水线）到实盘交易学习（ClawQuant，每笔交易生成 Trade Learning Record）。
+
+全局对比：进化光谱把这些系统按”进化机制的激进程度”排列：
+保守（不改系统本身）                      激进（系统自我改写）──────────┼─────────┼─────────┼─────────┼─────────→Curator    Distiller  Feedback  GEP        RSI       Self-Modify（清理）    （写技能）  Descent  （基因编程）（自审计）  （改源码）                      +种群self-      self-      EvoSkill  Evolver    GBase     Ouroborosimproving  improving  SkillRL             （规划中）  ClawQuant(curator)  (distill)  AgentQuant
+
+没有哪个系统是完美的，但每个系统都有至少一个设计值得移植。
+
+理想融合架构如果把这些设计的精华融合到一个系统里：
+触发层（hermes + self-improving-skills）  ├── cron/webhook 定时任务  ├── Stop hook 复杂度检测  └── 后台意识主动发现改进机会进化载体（evolver）  ├── Gene = 改进假设（结构化 JSON）  ├── Capsule = 实验证据（带 outcome 评分）  └── Epigenetic marks = 激活/抑制控制进化算法（EvoSkill + SkillRL）  ├── Feedback Descent: 成对比较 + 历史反馈  ├── Frontier population: 保留 top 3 多样种群  └── Dynamic update: 失败→新 Gene认知沉淀（gbase）  ├── L1 经验: 自动从 tool call 提取  ├── L2 概念: LLM 蒸馏为跨场景抽象  └── L3 策略: 定期整合为可执行改进治理系统（ouroboros + hermes）  ├── 宪法: 定义不可违背的原则  ├── Footprint Ladder: 控制进化范围  └── 安全: 硬沙箱 + LLM 审查 + 回滚维护系统（self-improving-skills）  ├── Usage tracking: 每次使用都计数  ├── 时间淘汰: active→stale→archived  └── Pin/promote: 人类控制的例外
+
+
+笔记索引
+
+
+笔记
+主题
+
+
+
+feedback-descent.md
+EvoSkill 核心算法：133 行通用文本优化
+
+
+self-improving-skills-core.md
+self-improving-skills 全链路 + dev-log 的 7 个 bug 故事
+
+
+skillrl-core.md
+SkillRL：RL + SKILLBANK + 动态更新
+
+
+ouroboros-core.md
+Ouroboros：宪法+意识+自我改写
+
+
+gbase-core.md
+GBase：三层沉淀+质量门+（规划中的）RSI
+
+
+evolver-core.md
+Evolver：Gene+Capsule+表观遗传
+
+
+hermes-agent-core.md
+Hermes：Footprint Ladder + Skills 系统
+
+
+quant-trading-cluster.md
+量化交易集群：自进化在金融的 5 种应用
+
+
+global-comparison.md
+全局对比 + 设计继承关系 + 理想融合架构
+
+
+
+关于这个研究这是一个下午的成果。我有一个 AI 搭档——它读了源码、写了笔记、画了光谱、讲了 dev-log 的故事。我只是做决策：看哪个、跳过哪个、笔记写得对不对。
+论文里讲”人机协作做研究”，这大概就是雏形。
+
+研究搭档：Claude Code + self-improving-skills 插件日期：2026 年 6 月 26 日
+
+引用项目链接Agent 框架
+
+
+项目
+链接
+论文
+
+
+
+EvoSkill
+Sentient Labs
+alphaXiv 2603.02766
+
+
+SkillRL
+aiming-lab
+arXiv 2602.08234
+
+
+Evolver
+EvoMap
+arXiv 2604.15097
+
+
+GBase
+garyqlin
+—
+
+
+Hermes Agent
+NousResearch · 中文文档
+—
+
+
+AgentLearn
+OnePunchMonk
+—
+
+
+系统工具
+
+
+项目
+链接
+
+
+
+Ouroboros
+razzant
+
+
+Genesis Agent
+nicepkg
+
+
+Jam
+nicepkg
+
+
+TG-HELPER
+OnePunchMonk
+
+
+Friday Showcase
+nicepkg
+
+
+量化交易
+
+
+项目
+链接
+论文
+
+
+
+AgentQuant
+OnePunchMonk
+—
+
+
+ClawQuant
+MAVtechdev
+—
+
+
+FinCrew
+nicepkg
+—
+
+
+Robin
+OnePunchMonk
+—
+
+
+Agent Trading Arena
+OnePunchMonk
+EMNLP 2025, ICML 2026
+
+
+Claude Code 插件
+
+
+插件
+链接
+
+
+
+self-improving-skills
+UniM0cha
+
+
+superpowers
+nicepkg
+
+
+参考论文
+
+
+论文
+链接
+
+
+
+FactorMiner
+arXiv 2602.14670
+
+
+AQAA
+Zenodo
+
+
+EvolveMem
+arXiv 2605.13941
+
+
+Feedback Descent
+arXiv 2511.07919
+
+
+GEPA
+Sentient Labs
+
+
+]]></content>
+      <categories>
+        <category>研究笔记</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>自进化</tag>
+        <tag>Agent</tag>
+        <tag>研究笔记</tag>
+        <tag>开源</tag>
+      </tags>
+  </entry>
 </search>
