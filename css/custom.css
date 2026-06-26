@@ -1,0 +1,85 @@
+/* ===== 移植自 blog.imzjw.cn / nanshen 主题 ===== */
+
+/* 1. 彩虹渐变背景 */
+#web_bg {
+  background: linear-gradient(
+    90deg,
+    rgba(247, 149, 51, 0.1),
+    rgba(243, 112, 85, 0.1) 15%,
+    rgba(239, 78, 123, 0.1) 30%,
+    rgba(161, 102, 171, 0.1) 44%,
+    rgba(80, 115, 184, 0.1) 58%,
+    rgba(16, 152, 173, 0.1) 72%,
+    rgba(7, 179, 155, 0.1) 86%,
+    rgba(109, 186, 130, 0.1)
+  );
+}
+
+/* 2. 毛玻璃页脚 */
+#footer {
+  background: rgba(255, 255, 255, 0.15);
+  color: #000;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  backdrop-filter: saturate(100%) blur(5px);
+  -webkit-backdrop-filter: saturate(100%) blur(5px);
+}
+#footer #footer-wrap {
+  color: var(--font-color);
+}
+#footer #footer-wrap a {
+  color: var(--font-color);
+}
+
+/* 3. 居中导航菜单 */
+#nav .menus_items {
+  position: absolute;
+  width: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.menus_item_child li:not(#sidebar-menus li) {
+  float: left;
+  border-radius: 6px !important;
+}
+.menus_item_child:not(#sidebar-menus ul) {
+  left: 50%;
+  translate: -50%;
+}
+
+/* 4. 代码字体 JetBrainsMono */
+@font-face {
+  font-family: JetBrainsMono;
+  src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Medium.woff2');
+  font-display: swap;
+}
+#article-container code {
+  font-family: JetBrainsMono, Consolas, monospace !important;
+}
+
+/* 5. 页面标题居中 */
+#page h1.page-title,
+#post > #post-info {
+  text-align: center;
+}
+
+/* 6. 右侧按钮圆角 */
+#rightside > div > a,
+#rightside > div > button {
+  border-radius: 15px;
+}
+
+/* 7. 暗色模式评论框 */
+[data-theme='dark'] .comments {
+  background: rgba(90, 90, 90, 0.8);
+}
+
+/* 8. 卡片边框 */
+[data-theme='light'] {
+  --card-border-color: #e3e8f7;
+  --card-bg: #fff;
+}
+[data-theme='dark'] {
+  --card-border-color: #42444a;
+  --card-bg: #1d1b26;
+}
