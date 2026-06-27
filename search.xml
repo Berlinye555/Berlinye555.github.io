@@ -1617,4 +1617,88 @@ SkillRL 的动态更新是最接近”自进化”的：
         <tag>项目</tag>
       </tags>
   </entry>
+  <entry>
+    <title>一天搭建博客踩过的坑——5个教训</title>
+    <url>/2026/06/27/lessons-from-blog-building/</url>
+    <content><![CDATA[背景2026 年 6 月 27 日，我花了一个下午搭建 Hexo + Butterfly 博客。上线只用了 30 分钟——然后修 bug 修了 4 个小时。
+这篇记录踩过的坑。
+
+教训一：抄别人主题前，先确认版本号起因很简单：看到 blog.imzjw.cn 好看，想把他的样式搬过来。
+直接下载了他的 nanshen CSS 包，注入到自己的博客里。以为”同一个主题，CSS 肯定兼容”。
+不是。 他用的是 Butterfly 3.x&#x2F;4.x，我装的是 5.5.5。CSS 里的 #web_bg、#footer 等选择器在 5.5.5 里优先级完全不一样——背景渐变不生效、页脚毛玻璃不显示、导航栏歪掉。
+花了一个多小时在 CSS 优先级上打仗——!important、换个位置加载、内联 style——全是徒劳。
+正确做法：搬样式前先看对方 index.css 版本号（?v=4.13.0），确认和自己的 Butterfly 大版本一致。
+
+教训二：先 git init，再动手最惨的不是改坏了，是改坏了回不去。
+博客源码目录没初始化 git。每次改坏了只能：
+
+git clone 远程 GitHub Pages 仓库到 /tmp
+找到正确的 commit
+git reset --hard + git push --force
+网络不好时重试 2-3 次
+
+回退一次 3-5 分钟。今天 force push 了至少 6 次。
+正确做法：改之前先在源码目录 git init &amp;&amp; git commit -m &quot;baseline&quot; &amp;&amp; git tag ok。改坏了 git checkout ok，一秒恢复。
+
+教训三：每次只改一件事同一条命令里改了 5 个配置项 + 注入 CSS + 安装插件。出错了要逐一排除到底是哪个引起的——是配置冲突？CSS 覆盖？插件不兼容？
+如果拆成 5 次独立提交，坏了一个 git revert 就回来，其他 4 个不受影响。
+正确做法：小步提交。改配置→验证→commit→下一步。
+
+教训四：YAML 序列化不是”看起来对就行”用 js-yaml.dump() 写配置文件时踩了两个坑：
+
+description: { enable: true, text: &#39;...&#39; } 被写成嵌套对象，模板渲染出来是 [object Object]
+双引号转义 onload=&quot;this.media=&quot;&quot;all&quot;&quot; 让 HTML 属性断裂
+
+这两个 bug 从博客上线的第一个版本就存在，但一直以为是”浏览器缓存问题”。直到开了无痕窗口才确认是真实的渲染错误。
+正确做法：每次改完配置，grep 一下生成的 HTML 确认没有 [object Object]，没有断裂的属性。
+
+教训五：别在试验阶段碰访客统计想在侧边栏加访客地球、在线人数、热门文章——搞了一小时发现：
+
+国外访客地图服务（clustrmaps、revolvemaps）国内全被墙
+在线人数需要后端支持，静态博客做不了真的
+热门文章插件不存在于 npm
+
+最后全删了。如果先在浏览器里打开这些服务的官网看看能不能访问，30 秒就能判断不可行。
+正确做法：动工前花 30 秒验证前置条件。
+
+总结
+
+
+教训
+一句话
+
+
+
+版本兼容
+抄 CSS 前看对方版本号
+
+
+git 兜底
+改之前先 git init
+
+
+小步提交
+每次只改一件事
+
+
+验证输出
+改完配置 grep 一下 HTML
+
+
+验证前置
+装插件前先看官网能不能打开
+
+
+最终状态是好的——11 篇文章、双置顶、系列合集、留言板、搜索，干干净净。但如果有 git，今天至少省一小时。
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>博客</tag>
+        <tag>Hexo</tag>
+        <tag>教训</tag>
+        <tag>效率</tag>
+      </tags>
+  </entry>
 </search>
