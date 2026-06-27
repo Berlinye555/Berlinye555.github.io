@@ -1,27 +1,27 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一天搭建博客踩过的坑——5个教训 | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2026年6月27日，花了一个下午搭Hexo博客。从零到上线只用了30分钟，然后花4小时修bug。这篇文章记录5个最惨痛的教训。">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一天搭建博客踩过的坑——用自己总结的方法复盘 | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="用 Feedback Descent、dev-log 教训、skill-distiller 决策树三大框架复盘今天搭博客的失败——不是运气不好，是违背了自己总结的每一套方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一天搭建博客踩过的坑——5个教训">
+<meta property="og:title" content="一天搭建博客踩过的坑——用自己总结的方法复盘">
 <meta property="og:url" content="https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/index.html">
 <meta property="og:site_name" content="Berlinye">
-<meta property="og:description" content="2026年6月27日，花了一个下午搭Hexo博客。从零到上线只用了30分钟，然后花4小时修bug。这篇文章记录5个最惨痛的教训。">
+<meta property="og:description" content="用 Feedback Descent、dev-log 教训、skill-distiller 决策树三大框架复盘今天搭博客的失败——不是运气不好，是违背了自己总结的每一套方法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://berlinye555.github.io/img/avatar.svg">
 <meta property="article:published_time" content="2026-06-27T05:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-27T08:08:09.406Z">
+<meta property="article:modified_time" content="2026-06-27T10:54:59.621Z">
 <meta property="article:author" content="Berlinye">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="博客">
-<meta property="article:tag" content="效率">
-<meta property="article:tag" content="教训">
+<meta property="article:tag" content="复盘">
+<meta property="article:tag" content="方法论">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://berlinye555.github.io/img/avatar.svg"><script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "一天搭建博客踩过的坑——5个教训",
+  "headline": "一天搭建博客踩过的坑——用自己总结的方法复盘",
   "url": "https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/",
   "image": "https://berlinye555.github.io/img/avatar.svg",
   "datePublished": "2026-06-27T05:00:00.000Z",
-  "dateModified": "2026-06-27T08:08:09.406Z",
+  "dateModified": "2026-06-27T10:54:59.621Z",
   "author": [
     {
       "@type": "Person",
@@ -158,81 +158,130 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '一天搭建博客踩过的坑——5个教训',
+  title: '一天搭建博客踩过的坑——用自己总结的方法复盘',
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">一天搭建博客踩过的坑——5个教训</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">一天搭建博客踩过的坑——5个教训</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-27T05:00:00.000Z" title="发表于 2026-06-27 13:00:00">2026-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-27T08:08:09.406Z" title="更新于 2026-06-27 16:08:09">2026-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">868</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>2026 年 6 月 27 日，我花了一个下午搭建 Hexo + Butterfly 博客。上线只用了 30 分钟——然后修 bug 修了 4 个小时。</p>
-<p>这篇记录踩过的坑。</p>
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">一天搭建博客踩过的坑——用自己总结的方法复盘</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">一天搭建博客踩过的坑——用自己总结的方法复盘</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-27T05:00:00.000Z" title="发表于 2026-06-27 13:00:00">2026-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-27T10:54:59.621Z" title="更新于 2026-06-27 18:54:59">2026-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>2026 年 6 月 27 日，花了一个下午搭 Hexo + Butterfly 博客。上线只用了 30 分钟，然后修 bug 修了 4 个小时。</p>
+<p>有意思的不是踩了多少坑——而是前几天我刚写完<a href="/2026/06/27/self-evolving-ai-research-journal/">自进化 AI 系统深度对比研究</a>，总结了一堆优秀的设计模式。<strong>今天的所有失败，恰恰是把我自己总结的每一条方法论都反着来了一遍。</strong></p>
+<p>用那套框架复盘，比单纯”教训 12345”有启发得多。</p>
 <hr>
-<h2 id="教训一：抄别人主题前，先确认版本号"><a href="#教训一：抄别人主题前，先确认版本号" class="headerlink" title="教训一：抄别人主题前，先确认版本号"></a>教训一：抄别人主题前，先确认版本号</h2><p>起因很简单：看到 <a target="_blank" rel="noopener" href="https://blog.imzjw.cn/">blog.imzjw.cn</a> 好看，想把他的样式搬过来。</p>
-<p>直接下载了他的 <code>nanshen</code> CSS 包，注入到自己的博客里。以为”同一个主题，CSS 肯定兼容”。</p>
-<p><strong>不是。</strong> 他用的是 Butterfly 3.x&#x2F;4.x，我装的是 5.5.5。CSS 里的 <code>#web_bg</code>、<code>#footer</code> 等选择器在 5.5.5 里优先级完全不一样——背景渐变不生效、页脚毛玻璃不显示、导航栏歪掉。</p>
-<p>花了一个多小时在 CSS 优先级上打仗——<code>!important</code>、换个位置加载、内联 style——全是徒劳。</p>
-<p><strong>正确做法</strong>：搬样式前先看对方 <code>index.css</code> 版本号（<code>?v=4.13.0</code>），确认和自己的 Butterfly 大版本一致。</p>
+<h2 id="一、用-Feedback-Descent-的视角看操作流程"><a href="#一、用-Feedback-Descent-的视角看操作流程" class="headerlink" title="一、用 Feedback Descent 的视角看操作流程"></a>一、用 Feedback Descent 的视角看操作流程</h2><p><a href="/2026/06/27/feedback-descent/">Feedback Descent</a> 是我从 EvoSkill 源码里提取的核心算法，只有 133 行。它的关键是：</p>
+<blockquote>
+<p><strong>失败时保留反馈，成功时清空历史。</strong></p>
+</blockquote>
+<p>回头看我今天的操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第1轮：改 YAML 配置 → [object Object] → 没发现，继续改别的</span><br><span class="line">第2轮：注入 nanshen CSS → 优先级冲突 → 加 !important → 更乱</span><br><span class="line">第3轮：加访客功能 → 被墙 → 删掉</span><br><span class="line">第4轮：换头像 → 线上回退 → 网络 reset → 重试 3 次</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>每轮失败后<strong>没有保留任何反馈</strong>。如果每轮结束记录一条：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[FAIL] YAML dump → [object Object]</span><br><span class="line">  原因：description 被序列化为对象</span><br><span class="line">  对策：生成后 grep HTML 确认没有 [object Object]</span><br><span class="line"></span><br><span class="line">[FAIL] nanshen CSS 不生效</span><br><span class="line">  原因：Butterfly 5.5.5 vs 4.x，选择器优先级不同</span><br><span class="line">  对策：抄 CSS 前确认对方版本号</span><br><span class="line"></span><br><span class="line">[FAIL] 访客地球 404</span><br><span class="line">  原因：国外服务国内被墙</span><br><span class="line">  对策：动工前花 30 秒验证前置条件</span><br></pre></td></tr></table></figure>
+
+<p><strong>Feedback Descent 的清空机制也很有意思：只有成功替换才清空历史。</strong> 我今天等于是每轮失败都清空了历史——不是算法设计的清空，而是”忘了刚才踩了什么坑”——然后下一轮踩一模一样的。</p>
 <hr>
-<h2 id="教训二：先-git-init，再动手"><a href="#教训二：先-git-init，再动手" class="headerlink" title="教训二：先 git init，再动手"></a>教训二：先 git init，再动手</h2><p>最惨的不是改坏了，是改坏了回不去。</p>
-<p>博客源码目录没初始化 git。每次改坏了只能：</p>
-<ol>
-<li><code>git clone</code> 远程 GitHub Pages 仓库到 <code>/tmp</code></li>
-<li>找到正确的 commit</li>
-<li><code>git reset --hard</code> + <code>git push --force</code></li>
-<li>网络不好时重试 2-3 次</li>
-</ol>
-<p>回退一次 3-5 分钟。今天 force push 了至少 6 次。</p>
-<p><strong>正确做法</strong>：改之前先在源码目录 <code>git init &amp;&amp; git commit -m &quot;baseline&quot; &amp;&amp; git tag ok</code>。改坏了 <code>git checkout ok</code>，一秒恢复。</p>
-<hr>
-<h2 id="教训三：每次只改一件事"><a href="#教训三：每次只改一件事" class="headerlink" title="教训三：每次只改一件事"></a>教训三：每次只改一件事</h2><p>同一条命令里改了 5 个配置项 + 注入 CSS + 安装插件。出错了要逐一排除到底是哪个引起的——是配置冲突？CSS 覆盖？插件不兼容？</p>
-<p>如果拆成 5 次独立提交，坏了一个 <code>git revert</code> 就回来，其他 4 个不受影响。</p>
-<p><strong>正确做法</strong>：小步提交。改配置→验证→commit→下一步。</p>
-<hr>
-<h2 id="教训四：YAML-序列化不是”看起来对就行”"><a href="#教训四：YAML-序列化不是”看起来对就行”" class="headerlink" title="教训四：YAML 序列化不是”看起来对就行”"></a>教训四：YAML 序列化不是”看起来对就行”</h2><p>用 <code>js-yaml.dump()</code> 写配置文件时踩了两个坑：</p>
-<ul>
-<li><code>description: { enable: true, text: &#39;...&#39; }</code> 被写成嵌套对象，模板渲染出来是 <code>[object Object]</code></li>
-<li>双引号转义 <code>onload=&quot;this.media=&quot;&quot;all&quot;&quot;</code> 让 HTML 属性断裂</li>
-</ul>
-<p>这两个 bug 从博客上线的第一个版本就存在，但一直以为是”浏览器缓存问题”。直到开了无痕窗口才确认是真实的渲染错误。</p>
-<p><strong>正确做法</strong>：每次改完配置，<code>grep</code> 一下生成的 HTML 确认没有 <code>[object Object]</code>，没有断裂的属性。</p>
-<hr>
-<h2 id="教训五：别在试验阶段碰访客统计"><a href="#教训五：别在试验阶段碰访客统计" class="headerlink" title="教训五：别在试验阶段碰访客统计"></a>教训五：别在试验阶段碰访客统计</h2><p>想在侧边栏加访客地球、在线人数、热门文章——搞了一小时发现：</p>
-<ul>
-<li>国外访客地图服务（clustrmaps、revolvemaps）国内全被墙</li>
-<li>在线人数需要后端支持，静态博客做不了真的</li>
-<li>热门文章插件不存在于 npm</li>
-</ul>
-<p>最后全删了。如果先在浏览器里打开这些服务的官网看看能不能访问，30 秒就能判断不可行。</p>
-<p><strong>正确做法</strong>：动工前花 30 秒验证前置条件。</p>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<h2 id="二、用-dev-log-的视角看-object-Object"><a href="#二、用-dev-log-的视角看-object-Object" class="headerlink" title="二、用 dev-log 的视角看 [object Object]"></a>二、用 dev-log 的视角看 <code>[object Object]</code></h2><p>dev-log 是我在分析 <a href="/2026/06/27/self-improving-skills-core/">self-improving-skills</a> 时发现的一个故事：同一个作者的另一个插件，在 396 个真实 session 里一次都没触发。根因是 grep 了错误的 JSON key。</p>
+<table>
 <thead>
 <tr>
-<th>教训</th>
-<th>一句话</th>
+<th></th>
+<th>dev-log</th>
+<th>今天</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>版本兼容</td>
-<td>抄 CSS 前看对方版本号</td>
+<td>应该检查的</td>
+<td><code>message.content[].name</code></td>
+<td>渲染出的 HTML</td>
 </tr>
 <tr>
-<td>git 兜底</td>
-<td>改之前先 git init</td>
+<td>实际检查的</td>
+<td><code>&quot;tool&quot;:&quot;Edit&quot;</code></td>
+<td>配置文件</td>
 </tr>
 <tr>
-<td>小步提交</td>
-<td>每次只改一件事</td>
-</tr>
-<tr>
-<td>验证输出</td>
-<td>改完配置 grep 一下 HTML</td>
-</tr>
-<tr>
-<td>验证前置</td>
-<td>装插件前先看官网能不能打开</td>
+<td>结果</td>
+<td>396 session 静默失败</td>
+<td>4 小时没人发现</td>
 </tr>
 </tbody></table>
-<p>最终状态是好的——11 篇文章、双置顶、系列合集、留言板、搜索，干干净净。但如果有 git，今天至少省一小时。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/">https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8D%9A%E5%AE%A2/">博客</a><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/%E6%95%99%E8%AE%AD/">教训</a><a class="post-meta__tags" href="/tags/%E6%95%88%E7%8E%87/">效率</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/27/void-threshold/" title="虚空·门槛 —— 一个暗黑科幻互动叙事项目"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">虚空·门槛 —— 一个暗黑科幻互动叙事项目</div></div><div class="info-2"><div class="info-item-1">17篇交织的科幻叙事碎片，一个用纯HTML构建的暗黑未来宇宙</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">记录 AI Agent、自进化系统、量化交易的研究与思考</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E8%AE%AD%E4%B8%80%EF%BC%9A%E6%8A%84%E5%88%AB%E4%BA%BA%E4%B8%BB%E9%A2%98%E5%89%8D%EF%BC%8C%E5%85%88%E7%A1%AE%E8%AE%A4%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="toc-number">2.</span> <span class="toc-text">教训一：抄别人主题前，先确认版本号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E8%AE%AD%E4%BA%8C%EF%BC%9A%E5%85%88-git-init%EF%BC%8C%E5%86%8D%E5%8A%A8%E6%89%8B"><span class="toc-number">3.</span> <span class="toc-text">教训二：先 git init，再动手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E8%AE%AD%E4%B8%89%EF%BC%9A%E6%AF%8F%E6%AC%A1%E5%8F%AA%E6%94%B9%E4%B8%80%E4%BB%B6%E4%BA%8B"><span class="toc-number">4.</span> <span class="toc-text">教训三：每次只改一件事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E8%AE%AD%E5%9B%9B%EF%BC%9AYAML-%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8D%E6%98%AF%E2%80%9D%E7%9C%8B%E8%B5%B7%E6%9D%A5%E5%AF%B9%E5%B0%B1%E8%A1%8C%E2%80%9D"><span class="toc-number">5.</span> <span class="toc-text">教训四：YAML 序列化不是”看起来对就行”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E8%AE%AD%E4%BA%94%EF%BC%9A%E5%88%AB%E5%9C%A8%E8%AF%95%E9%AA%8C%E9%98%B6%E6%AE%B5%E7%A2%B0%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1"><span class="toc-number">6.</span> <span class="toc-text">教训五：别在试验阶段碰访客统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/lessons-from-blog-building/" title="一天搭建博客踩过的坑——5个教训">一天搭建博客踩过的坑——5个教训</a><time datetime="2026-06-27T05:00:00.000Z" title="发表于 2026-06-27 13:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/void-threshold/" title="虚空·门槛 —— 一个暗黑科幻互动叙事项目">虚空·门槛 —— 一个暗黑科幻互动叙事项目</a><time datetime="2026-06-27T04:00:00.000Z" title="发表于 2026-06-27 12:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法">Feedback Descent——用文本反馈驱动优化的通用算法</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+<p><strong>根因完全一样：验证的目标和实际输出不一致。</strong> <code>js-yaml.dump()</code> 写出的配置文件看起来对，但模板渲染出来是 <code>[object Object]</code>。我一直在看配置文件，从来没 <code>grep</code> 一下生成出来的 HTML。</p>
+<p><code>analyze_turn.py</code> 里有一个设计我一直记得：<strong>“Tool calls are detected via the REAL transcript shape”</strong>——用真实的数据结构做判断，不要猜。今天如果改完 YAML 后看了一眼渲染结果，30 秒发现、1 分钟修好。</p>
+<hr>
+<h2 id="三、用-skill-distiller-的决策树看操作模式"><a href="#三、用-skill-distiller-的决策树看操作模式" class="headerlink" title="三、用 skill-distiller 的决策树看操作模式"></a>三、用 skill-distiller 的决策树看操作模式</h2><p><a href="/2026/06/27/self-improving-skills-core/">self-improving-skills 的 skill-distiller</a> 有一个铁律：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">接到蒸馏任务</span><br><span class="line">  → ① 有直接相关的已有技能？ → Patch 它（不新建）</span><br><span class="line">  → ② 有 umbrella 技能可扩展？ → 加 subsection</span><br><span class="line">  → ③ 够复杂需要独立文件？ → 放 references/</span><br><span class="line">  → ④ 最后手段 → 创建新技能</span><br></pre></td></tr></table></figure>
+
+<p><strong>我今天全反着来：</strong></p>
+<ul>
+<li>nanshen CSS 冲突 → 不修优先级，直接新建 <code>custom.css</code></li>
+<li>自定义样式不生效 → 不加 <code>!important</code> 到原文件，而是注入 <code>inject.bottom</code></li>
+<li>配置错误 → 不 git revert，而是 force push 后重来</li>
+</ul>
+<p>每一次都是”从零建新方案”而不是”在现有基础上修”。Skill-distiller 的设计思想是<strong>保守演进</strong>——能 patch 就不新建，能扩展就不重写。今天的操作是<strong>激进重来</strong>——每次失败都把之前的全推倒。</p>
+<hr>
+<h2 id="四、用-Nudge-Once-机制看刹车缺失"><a href="#四、用-Nudge-Once-机制看刹车缺失" class="headerlink" title="四、用 Nudge-Once 机制看刹车缺失"></a>四、用 Nudge-Once 机制看刹车缺失</h2><p><code>analyze_turn.py</code> 里有一个”nudge once per segment”设计：同一个提醒在一个工作段内只弹一次，用户拒绝了就不再重复。</p>
+<blockquote>
+<p><em>A nudge is raised at most ONCE per segment of work.</em></p>
+</blockquote>
+<p>今天要有这机制：第一次加 CSS 导致页面崩了，就会被拦住——“上次也是注入 CSS 导致的问题，确认要继续？”</p>
+<p>没有刹车，连续犯同样的错。</p>
+<hr>
+<h2 id="五、用全局光谱看今天的定位"><a href="#五、用全局光谱看今天的定位" class="headerlink" title="五、用全局光谱看今天的定位"></a>五、用全局光谱看今天的定位</h2><p><a href="/2026/06/27/global-comparison/">全局对比</a> 里我把 8 个系统按进化机制的激进程度排了一条光谱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">保守 ──────────────────────────────→ 激进</span><br><span class="line">Curator → Distiller → Feedback Descent → GEP → RSI → Self-Modify</span><br></pre></td></tr></table></figure>
+
+<p><strong>我今天在模仿最激进的那端（Self-Modify）——直接改线上生产环境。</strong> 没有 curator 保留反馈，没有 distiller 沉淀教训，没有 feedback descent 成对比较——就是改→坏→回退→改→坏→回退的随机游走。</p>
+<p>如果按保守端来：</p>
+<ol>
+<li><strong>Curator</strong>：每次失败记录一条 feedback</li>
+<li><strong>Distiller</strong>：累积 3 条同类 feedback → 蒸馏成 class-level 教训</li>
+<li><strong>Feedback Descent</strong>：下次遇到同类问题，先对比已知教训和当前方案</li>
+</ol>
+<p>这就是 skill-distiller 的设计精神。我分析它的时候觉得”这个决策树很好用”，今天却一次没用上。</p>
+<hr>
+<h2 id="六个具体教训"><a href="#六个具体教训" class="headerlink" title="六个具体教训"></a>六个具体教训</h2><table>
+<thead>
+<tr>
+<th>#</th>
+<th>教训</th>
+<th>对应的框架</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>抄 CSS 前确认版本号</td>
+<td>Feedback Descent：成对比较前先验证可比性</td>
+</tr>
+<tr>
+<td>2</td>
+<td>改之前 git init</td>
+<td>dev-log 教训：要有降级路径</td>
+</tr>
+<tr>
+<td>3</td>
+<td>每次只改一件事</td>
+<td>skill-distiller：保守演进，能 patch 不重写</td>
+</tr>
+<tr>
+<td>4</td>
+<td>改完 grep HTML</td>
+<td>dev-log 教训：验证真实输出，不猜</td>
+</tr>
+<tr>
+<td>5</td>
+<td>装插件前验证前置</td>
+<td>Feedback Descent：先确认 evaluator 可用</td>
+</tr>
+<tr>
+<td>6</td>
+<td>记录每次失败</td>
+<td>Curator：保留反馈才能迭代</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p><strong>不是技术难，是没有用自己总结的方法。</strong> 今天之前我已经写了 9 篇分析笔记，把 Feedback Descent、dev-log 教训、skill-distiller 决策树、nudge-once 刹车全部拆清楚写下来了。然后一下午的操作，全部反着来。</p>
+</blockquote>
+<p>最后还用上了一条正确的方法：<code>git init &amp;&amp; git tag ok-20260627</code>——这就是 curator 的”保留反馈”。</p>
+<p>下次动手之前，先看一眼 <code>ok-20260627</code> 旁边的教训列表。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/">https://berlinye555.github.io/2026/06/27/lessons-from-blog-building/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8D%9A%E5%AE%A2/">博客</a><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/%E5%A4%8D%E7%9B%98/">复盘</a><a class="post-meta__tags" href="/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/">方法论</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/27/void-threshold/" title="虚空·门槛 —— 一个暗黑科幻互动叙事项目"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">虚空·门槛 —— 一个暗黑科幻互动叙事项目</div></div><div class="info-2"><div class="info-item-1">17篇交织的科幻叙事碎片，一个用纯HTML构建的暗黑未来宇宙</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">记录 AI Agent、自进化系统、量化交易的研究与思考</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%94%A8-Feedback-Descent-%E7%9A%84%E8%A7%86%E8%A7%92%E7%9C%8B%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">一、用 Feedback Descent 的视角看操作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%94%A8-dev-log-%E7%9A%84%E8%A7%86%E8%A7%92%E7%9C%8B-object-Object"><span class="toc-number">3.</span> <span class="toc-text">二、用 dev-log 的视角看 [object Object]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%94%A8-skill-distiller-%E7%9A%84%E5%86%B3%E7%AD%96%E6%A0%91%E7%9C%8B%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">三、用 skill-distiller 的决策树看操作模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%94%A8-Nudge-Once-%E6%9C%BA%E5%88%B6%E7%9C%8B%E5%88%B9%E8%BD%A6%E7%BC%BA%E5%A4%B1"><span class="toc-number">5.</span> <span class="toc-text">四、用 Nudge-Once 机制看刹车缺失</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%94%A8%E5%85%A8%E5%B1%80%E5%85%89%E8%B0%B1%E7%9C%8B%E4%BB%8A%E5%A4%A9%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="toc-number">6.</span> <span class="toc-text">五、用全局光谱看今天的定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E4%B8%AA%E5%85%B7%E4%BD%93%E6%95%99%E8%AE%AD"><span class="toc-number">7.</span> <span class="toc-text">六个具体教训</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/lessons-from-blog-building/" title="一天搭建博客踩过的坑——用自己总结的方法复盘">一天搭建博客踩过的坑——用自己总结的方法复盘</a><time datetime="2026-06-27T05:00:00.000Z" title="发表于 2026-06-27 13:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/void-threshold/" title="虚空·门槛 —— 一个暗黑科幻互动叙事项目">虚空·门槛 —— 一个暗黑科幻互动叙事项目</a><time datetime="2026-06-27T04:00:00.000Z" title="发表于 2026-06-27 12:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/feedback-descent/" title="Feedback Descent——用文本反馈驱动优化的通用算法">Feedback Descent——用文本反馈驱动优化的通用算法</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
   const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
   const option = null
 

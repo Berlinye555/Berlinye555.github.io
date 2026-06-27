@@ -1618,78 +1618,127 @@ SkillRL 的动态更新是最接近”自进化”的：
       </tags>
   </entry>
   <entry>
-    <title>一天搭建博客踩过的坑——5个教训</title>
+    <title>一天搭建博客踩过的坑——用自己总结的方法复盘</title>
     <url>/2026/06/27/lessons-from-blog-building/</url>
-    <content><![CDATA[背景2026 年 6 月 27 日，我花了一个下午搭建 Hexo + Butterfly 博客。上线只用了 30 分钟——然后修 bug 修了 4 个小时。
-这篇记录踩过的坑。
+    <content><![CDATA[背景2026 年 6 月 27 日，花了一个下午搭 Hexo + Butterfly 博客。上线只用了 30 分钟，然后修 bug 修了 4 个小时。
+有意思的不是踩了多少坑——而是前几天我刚写完自进化 AI 系统深度对比研究，总结了一堆优秀的设计模式。今天的所有失败，恰恰是把我自己总结的每一条方法论都反着来了一遍。
+用那套框架复盘，比单纯”教训 12345”有启发得多。
 
-教训一：抄别人主题前，先确认版本号起因很简单：看到 blog.imzjw.cn 好看，想把他的样式搬过来。
-直接下载了他的 nanshen CSS 包，注入到自己的博客里。以为”同一个主题，CSS 肯定兼容”。
-不是。 他用的是 Butterfly 3.x&#x2F;4.x，我装的是 5.5.5。CSS 里的 #web_bg、#footer 等选择器在 5.5.5 里优先级完全不一样——背景渐变不生效、页脚毛玻璃不显示、导航栏歪掉。
-花了一个多小时在 CSS 优先级上打仗——!important、换个位置加载、内联 style——全是徒劳。
-正确做法：搬样式前先看对方 index.css 版本号（?v=4.13.0），确认和自己的 Butterfly 大版本一致。
+一、用 Feedback Descent 的视角看操作流程Feedback Descent 是我从 EvoSkill 源码里提取的核心算法，只有 133 行。它的关键是：
 
-教训二：先 git init，再动手最惨的不是改坏了，是改坏了回不去。
-博客源码目录没初始化 git。每次改坏了只能：
+失败时保留反馈，成功时清空历史。
 
-git clone 远程 GitHub Pages 仓库到 /tmp
-找到正确的 commit
-git reset --hard + git push --force
-网络不好时重试 2-3 次
+回头看我今天的操作：
+第1轮：改 YAML 配置 → [object Object] → 没发现，继续改别的第2轮：注入 nanshen CSS → 优先级冲突 → 加 !important → 更乱第3轮：加访客功能 → 被墙 → 删掉第4轮：换头像 → 线上回退 → 网络 reset → 重试 3 次...
 
-回退一次 3-5 分钟。今天 force push 了至少 6 次。
-正确做法：改之前先在源码目录 git init &amp;&amp; git commit -m &quot;baseline&quot; &amp;&amp; git tag ok。改坏了 git checkout ok，一秒恢复。
+每轮失败后没有保留任何反馈。如果每轮结束记录一条：
+[FAIL] YAML dump → [object Object]  原因：description 被序列化为对象  对策：生成后 grep HTML 确认没有 [object Object][FAIL] nanshen CSS 不生效  原因：Butterfly 5.5.5 vs 4.x，选择器优先级不同  对策：抄 CSS 前确认对方版本号[FAIL] 访客地球 404  原因：国外服务国内被墙  对策：动工前花 30 秒验证前置条件
 
-教训三：每次只改一件事同一条命令里改了 5 个配置项 + 注入 CSS + 安装插件。出错了要逐一排除到底是哪个引起的——是配置冲突？CSS 覆盖？插件不兼容？
-如果拆成 5 次独立提交，坏了一个 git revert 就回来，其他 4 个不受影响。
-正确做法：小步提交。改配置→验证→commit→下一步。
+Feedback Descent 的清空机制也很有意思：只有成功替换才清空历史。 我今天等于是每轮失败都清空了历史——不是算法设计的清空，而是”忘了刚才踩了什么坑”——然后下一轮踩一模一样的。
 
-教训四：YAML 序列化不是”看起来对就行”用 js-yaml.dump() 写配置文件时踩了两个坑：
+二、用 dev-log 的视角看 [object Object]dev-log 是我在分析 self-improving-skills 时发现的一个故事：同一个作者的另一个插件，在 396 个真实 session 里一次都没触发。根因是 grep 了错误的 JSON key。
 
-description: { enable: true, text: &#39;...&#39; } 被写成嵌套对象，模板渲染出来是 [object Object]
-双引号转义 onload=&quot;this.media=&quot;&quot;all&quot;&quot; 让 HTML 属性断裂
 
-这两个 bug 从博客上线的第一个版本就存在，但一直以为是”浏览器缓存问题”。直到开了无痕窗口才确认是真实的渲染错误。
-正确做法：每次改完配置，grep 一下生成的 HTML 确认没有 [object Object]，没有断裂的属性。
 
-教训五：别在试验阶段碰访客统计想在侧边栏加访客地球、在线人数、热门文章——搞了一小时发现：
 
-国外访客地图服务（clustrmaps、revolvemaps）国内全被墙
-在线人数需要后端支持，静态博客做不了真的
-热门文章插件不存在于 npm
+dev-log
+今天
 
-最后全删了。如果先在浏览器里打开这些服务的官网看看能不能访问，30 秒就能判断不可行。
-正确做法：动工前花 30 秒验证前置条件。
+
+
+应该检查的
+message.content[].name
+渲染出的 HTML
+
+
+实际检查的
+&quot;tool&quot;:&quot;Edit&quot;
+配置文件
+
+
+结果
+396 session 静默失败
+4 小时没人发现
+
+
+根因完全一样：验证的目标和实际输出不一致。 js-yaml.dump() 写出的配置文件看起来对，但模板渲染出来是 [object Object]。我一直在看配置文件，从来没 grep 一下生成出来的 HTML。
+analyze_turn.py 里有一个设计我一直记得：“Tool calls are detected via the REAL transcript shape”——用真实的数据结构做判断，不要猜。今天如果改完 YAML 后看了一眼渲染结果，30 秒发现、1 分钟修好。
+
+三、用 skill-distiller 的决策树看操作模式self-improving-skills 的 skill-distiller 有一个铁律：
+接到蒸馏任务  → ① 有直接相关的已有技能？ → Patch 它（不新建）  → ② 有 umbrella 技能可扩展？ → 加 subsection  → ③ 够复杂需要独立文件？ → 放 references/  → ④ 最后手段 → 创建新技能
+
+我今天全反着来：
+
+nanshen CSS 冲突 → 不修优先级，直接新建 custom.css
+自定义样式不生效 → 不加 !important 到原文件，而是注入 inject.bottom
+配置错误 → 不 git revert，而是 force push 后重来
+
+每一次都是”从零建新方案”而不是”在现有基础上修”。Skill-distiller 的设计思想是保守演进——能 patch 就不新建，能扩展就不重写。今天的操作是激进重来——每次失败都把之前的全推倒。
+
+四、用 Nudge-Once 机制看刹车缺失analyze_turn.py 里有一个”nudge once per segment”设计：同一个提醒在一个工作段内只弹一次，用户拒绝了就不再重复。
+
+A nudge is raised at most ONCE per segment of work.
+
+今天要有这机制：第一次加 CSS 导致页面崩了，就会被拦住——“上次也是注入 CSS 导致的问题，确认要继续？”
+没有刹车，连续犯同样的错。
+
+五、用全局光谱看今天的定位全局对比 里我把 8 个系统按进化机制的激进程度排了一条光谱：
+保守 ──────────────────────────────→ 激进Curator → Distiller → Feedback Descent → GEP → RSI → Self-Modify
+
+我今天在模仿最激进的那端（Self-Modify）——直接改线上生产环境。 没有 curator 保留反馈，没有 distiller 沉淀教训，没有 feedback descent 成对比较——就是改→坏→回退→改→坏→回退的随机游走。
+如果按保守端来：
+
+Curator：每次失败记录一条 feedback
+Distiller：累积 3 条同类 feedback → 蒸馏成 class-level 教训
+Feedback Descent：下次遇到同类问题，先对比已知教训和当前方案
+
+这就是 skill-distiller 的设计精神。我分析它的时候觉得”这个决策树很好用”，今天却一次没用上。
+
+六个具体教训
+
+
+#
+教训
+对应的框架
+
+
+
+1
+抄 CSS 前确认版本号
+Feedback Descent：成对比较前先验证可比性
+
+
+2
+改之前 git init
+dev-log 教训：要有降级路径
+
+
+3
+每次只改一件事
+skill-distiller：保守演进，能 patch 不重写
+
+
+4
+改完 grep HTML
+dev-log 教训：验证真实输出，不猜
+
+
+5
+装插件前验证前置
+Feedback Descent：先确认 evaluator 可用
+
+
+6
+记录每次失败
+Curator：保留反馈才能迭代
+
+
 
 总结
+不是技术难，是没有用自己总结的方法。 今天之前我已经写了 9 篇分析笔记，把 Feedback Descent、dev-log 教训、skill-distiller 决策树、nudge-once 刹车全部拆清楚写下来了。然后一下午的操作，全部反着来。
 
-
-教训
-一句话
-
-
-
-版本兼容
-抄 CSS 前看对方版本号
-
-
-git 兜底
-改之前先 git init
-
-
-小步提交
-每次只改一件事
-
-
-验证输出
-改完配置 grep 一下 HTML
-
-
-验证前置
-装插件前先看官网能不能打开
-
-
-最终状态是好的——11 篇文章、双置顶、系列合集、留言板、搜索，干干净净。但如果有 git，今天至少省一小时。
+最后还用上了一条正确的方法：git init &amp;&amp; git tag ok-20260627——这就是 curator 的”保留反馈”。
+下次动手之前，先看一眼 ok-20260627 旁边的教训列表。
 ]]></content>
       <categories>
         <category>笔记</category>
@@ -1697,8 +1746,8 @@ git 兜底
       <tags>
         <tag>博客</tag>
         <tag>Hexo</tag>
-        <tag>教训</tag>
-        <tag>效率</tag>
+        <tag>复盘</tag>
+        <tag>方法论</tag>
       </tags>
   </entry>
 </search>
