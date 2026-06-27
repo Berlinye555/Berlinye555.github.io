@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="100%" style="stop-color:#1a0a2e"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    <linearGradient id="eye" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#c084fc"/>
+      <stop offset="100%" style="stop-color:#818cf8"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="20" fill="url(#bg)"/>
+
+  <!-- Grid lines -->
+  <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+  <line x1="0" y1="100" x2="200" y2="100" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+  <line x1="0" y1="150" x2="200" y2="150" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+  <line x1="50" y1="0" x2="50" y2="200" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+  <line x1="100" y1="0" x2="100" y2="200" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+  <line x1="150" y1="0" x2="150" y2="200" stroke="rgba(168,85,247,0.05)" stroke-width="1"/>
+
+  <!-- Circuit pattern -->
+  <circle cx="50" cy="50" r="2" fill="#a855f7" opacity="0.3"/>
+  <circle cx="150" cy="50" r="2" fill="#6366f1" opacity="0.3"/>
+  <circle cx="50" cy="150" r="2" fill="#6366f1" opacity="0.3"/>
+  <circle cx="150" cy="150" r="2" fill="#a855f7" opacity="0.3"/>
+
+  <!-- Hexagon mask -->
+  <polygon points="100,35 140,58 140,102 100,125 60,102 60,58" fill="none" stroke="url(#neon)" stroke-width="2" filter="url(#glow)" opacity="0.8"/>
+  <rect x="85" y="62" width="30" height="3" rx="1.5" fill="url(#neon)" filter="url(#glow)"/>
+
+  <!-- Eyes -->
+  <ellipse cx="82" cy="78" rx="8" ry="5" fill="none" stroke="url(#eye)" stroke-width="2" filter="url(#glow)"/>
+  <ellipse cx="118" cy="78" rx="8" ry="5" fill="none" stroke="url(#eye)" stroke-width="2" filter="url(#glow)"/>
+  <circle cx="82" cy="78" r="3" fill="url(#eye)" opacity="0.6"/>
+  <circle cx="118" cy="78" r="3" fill="url(#eye)" opacity="0.6"/>
+
+  <!-- Mouth -->
+  <path d="M92,95 Q100,102 108,95" fill="none" stroke="url(#neon)" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Corner accents -->
+  <path d="M10,60 L10,10 L60,10" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.4"/>
+  <path d="M140,10 L190,10 L190,60" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <path d="M10,140 L10,190 L60,190" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <path d="M140,190 L190,190 L190,140" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Data dots -->
+  <circle cx="170" cy="30" r="1.5" fill="#a855f7" opacity="0.5"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="3s" repeatCount="indefinite"/></circle>
+  <circle cx="30" cy="170" r="1.5" fill="#6366f1" opacity="0.5"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+  <circle cx="170" cy="170" r="1.5" fill="#a855f7" opacity="0.5"><animate attributeName="opacity" values="0.1;0.5;0.1" dur="2s" repeatCount="indefinite"/></circle>
+  <circle cx="30" cy="30" r="1.5" fill="#6366f1" opacity="0.5"><animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.8s" repeatCount="indefinite"/></circle>
+</svg>
