@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>花 40 块买来的教训——别什么事都丢给子代理 | Berlinye</title><meta name="author" content="Berlinye"><meta name="copyright" content="Berlinye"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="用 Subagent-Driven Development 做了一次代码合并，8 个 Task 净增 1595 行代码。回头一看账单，¥39.61——正常一天才 ¥4.33。根因不是代码多，是缓存命中率崩了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="花 40 块买来的教训——别什么事都丢给子代理">
+<meta property="og:url" content="https://berlinye555.github.io/2026/06/28/subagent-cost-lessons/index.html">
+<meta property="og:site_name" content="Berlinye">
+<meta property="og:description" content="用 Subagent-Driven Development 做了一次代码合并，8 个 Task 净增 1595 行代码。回头一看账单，¥39.61——正常一天才 ¥4.33。根因不是代码多，是缓存命中率崩了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://berlinye555.github.io/img/avatar.svg">
+<meta property="article:published_time" content="2026-06-28T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-28T12:15:09.078Z">
+<meta property="article:author" content="Berlinye">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="子代理">
+<meta property="article:tag" content="成本优化">
+<meta property="article:tag" content="教训">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://berlinye555.github.io/img/avatar.svg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "花 40 块买来的教训——别什么事都丢给子代理",
+  "url": "https://berlinye555.github.io/2026/06/28/subagent-cost-lessons/",
+  "image": "https://berlinye555.github.io/img/avatar.svg",
+  "datePublished": "2026-06-28T15:00:00.000Z",
+  "dateModified": "2026-06-28T12:15:09.078Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Berlinye",
+      "url": "https://Berlinye555.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://berlinye555.github.io/2026/06/28/subagent-cost-lessons/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content=""/><meta name="baidu-site-verification" content=""/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '花 40 块买来的教训——别什么事都丢给子代理',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #0d0d0d;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&amp;q=80);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Berlinye</span></a><a class="nav-page-title" href="/"><span class="site-name">花 40 块买来的教训——别什么事都丢给子代理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/guestbook/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">花 40 块买来的教训——别什么事都丢给子代理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-28T12:15:09.078Z" title="更新于 2026-06-28 20:15:09">2026-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">881</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="发生了什么"><a href="#发生了什么" class="headerlink" title="发生了什么"></a>发生了什么</h2><p>workspace 里有两个 A 股量化项目，要把老项目的精华搬进新项目。活不大——最后净增 1595 行、4 个新文件、2 个改文件。正常情况下在对话里直接写，一两个小时搞定。</p>
+<p>但我手痒了。Claude Code 有个 <code>subagent-driven-development</code> 技能，号称”每个 Task 独立子代理 + 两阶段 review”，看起来很专业。8 个 Task，按这模式走，起了 24 次子代理。</p>
+<p>第二天打开 DeepSeek 后台，傻了。</p>
+<h2 id="账单说话"><a href="#账单说话" class="headerlink" title="账单说话"></a>账单说话</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>正常工作日 (6&#x2F;27)</th>
+<th>子代理实验 (6&#x2F;28)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>总使用量</td>
+<td>8,000 万 tokens</td>
+<td>6,400 万 tokens</td>
+</tr>
+<tr>
+<td>缓存命中</td>
+<td>7,900 万 (98.7%)</td>
+<td>5,200 万 (81.2%)</td>
+</tr>
+<tr>
+<td><strong>费用</strong></td>
+<td><strong>¥4.33</strong></td>
+<td><strong>¥39.61</strong></td>
+</tr>
+</tbody></table>
+<p>总使用量其实<strong>更少</strong>，钱却花了 9 倍。</p>
+<h2 id="凶手是缓存命中率"><a href="#凶手是缓存命中率" class="headerlink" title="凶手是缓存命中率"></a>凶手是缓存命中率</h2><p>打个比方：外卖的配送费。你点一单 30 块的饭，配送费 3 块；你分 8 单点，每单 4 块的菜，配送费 3×8&#x3D;24 块。饭钱差不多，配送费炸了。</p>
+<p>DeepSeek 的缓存机制就是这样。正常对话是连续追加——前面说过的内容走缓存，只对新内容付费。命中率 99%，便宜。</p>
+<p>子代理是 24 次<strong>独立</strong> API 调用。每次都换一套 task prompt、换一套代码上下文。缓存对不上，命中率掉到 81%。多出来的 1200 万未命中 tokens 全是钱。</p>
+<h2 id="它还不快"><a href="#它还不快" class="headerlink" title="它还不快"></a>它还不快</h2><p>有人说子代理能并行、能加速。这台机器的瓶颈是本地跑 Python、读文件、执行命令。子代理的 API 在云端，但工具执行还在地面——每个子代理要重新读代码、重新理解上下文。Review 循环更离谱，同一件事做三遍。</p>
+<p>原本一个半小时的活，子代理模式跑了快三个小时。</p>
+<h2 id="8-个-Task-逐个鞭尸"><a href="#8-个-Task-逐个鞭尸" class="headerlink" title="8 个 Task 逐个鞭尸"></a>8 个 Task 逐个鞭尸</h2><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>干嘛的</th>
+<th align="center">该用子代理？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>git 提交 + 建分支</td>
+<td align="center">❌ 两行命令的事</td>
+</tr>
+<tr>
+<td>2</td>
+<td>移植形态识别 593 行</td>
+<td align="center">✅ 正经代码</td>
+</tr>
+<tr>
+<td>3</td>
+<td>创建信号验证 313 行</td>
+<td align="center">✅ 正经代码</td>
+</tr>
+<tr>
+<td>4</td>
+<td>创建优化引擎 409 行</td>
+<td align="center">✅ 正经代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td>加 auto_scheme，23 行</td>
+<td align="center">❌ 改个配置文件而已</td>
+</tr>
+<tr>
+<td>6</td>
+<td>最终验证，跑命令</td>
+<td align="center">❌ 看输出就行</td>
+</tr>
+<tr>
+<td>7</td>
+<td>删除 test&#x2F; 目录</td>
+<td align="center">❌ <code>rm -rf</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>合并到 master</td>
+<td align="center">❌ <code>git merge</code></td>
+</tr>
+</tbody></table>
+<p><strong>8 个里 5 个纯属浪费。</strong> git、配置、验证、删除、合并——主对话几秒钟的事，各自起了一个完整子代理，还要配两轮 review。</p>
+<h2 id="三个教训"><a href="#三个教训" class="headerlink" title="三个教训"></a>三个教训</h2><h3 id="1-“推荐”不等于”适合”"><a href="#1-“推荐”不等于”适合”" class="headerlink" title="1. “推荐”不等于”适合”"></a>1. “推荐”不等于”适合”</h3><p>技能模板写着 “Subagent-Driven (recommended)”。那是给 20 个独立模块的大项目准备的。我一个 8 task、5 个琐事的合并计划也照搬，纯属偷懒。</p>
+<p><strong>技能是建议，决定权在自己。</strong></p>
+<h3 id="2-每个子代理都计费"><a href="#2-每个子代理都计费" class="headerlink" title="2. 每个子代理都计费"></a>2. 每个子代理都计费</h3><p>一次子代理启动约 ¥0.5-1.5。删个目录花 1 块，改个配置又花 1 块。花之前想想：这个 task 值不值？</p>
+<h3 id="3-缓存是白送的省钱工具"><a href="#3-缓存是白送的省钱工具" class="headerlink" title="3. 缓存是白送的省钱工具"></a>3. 缓存是白送的省钱工具</h3><p>同一个长对话 &#x3D; 高缓存命中 &#x3D; 便宜。频繁切上下文 &#x3D; 低命中 &#x3D; 贵。不是在教你节省 token，是让你别没事就切上下文。</p>
+<h2 id="以后怎么做"><a href="#以后怎么做" class="headerlink" title="以后怎么做"></a>以后怎么做</h2><p>一个简单的判断：</p>
+<ul>
+<li><strong>主对话 3 分钟能搞定的</strong> → 直接做，不提子代理</li>
+<li><strong>净增代码 &lt; 2000 行</strong> → 大概率不需要子代理</li>
+<li><strong>只有多文件、复杂逻辑、确实要隔离的</strong> → 再考虑</li>
+<li><strong>Review 不需要分两拨人</strong> → spec + code 合并成一个就行</li>
+</ul>
+<hr>
+<p><em>¥39.61 买的一课。下次起子代理之前，先问自己：这活值 1 块钱吗？</em></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Berlinye555.github.io">Berlinye</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://berlinye555.github.io/2026/06/28/subagent-cost-lessons/">https://berlinye555.github.io/2026/06/28/subagent-cost-lessons/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Berlinye555.github.io" target="_blank">Berlinye</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Claude-Code/">Claude Code</a><a class="post-meta__tags" href="/tags/%E6%95%99%E8%AE%AD/">教训</a><a class="post-meta__tags" href="/tags/%E5%AD%90%E4%BB%A3%E7%90%86/">子代理</a><a class="post-meta__tags" href="/tags/%E6%88%90%E6%9C%AC%E4%BC%98%E5%8C%96/">成本优化</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.svg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/27/lessons-from-blog-building/" title="一天搭建博客踩过的坑——用自己总结的方法复盘"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">一天搭建博客踩过的坑——用自己总结的方法复盘</div></div><div class="info-2"><div class="info-item-1">用 Feedback Descent、dev-log 教训、skill-distiller 决策树三大框架复盘今天搭博客的失败——不是运气不好，是违背了自己总结的每一套方法。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/27/hermes-agent-core/" title="Hermes Agent：self-improving-skills 的灵感来源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">Hermes Agent：self-improving-skills 的灵感来源</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a><a class="pagination-related" href="/2026/06/27/self-improving-skills-core/" title="self-improving-skills：日常工作的经验蒸馏引擎"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-27</div><div class="info-item-2">self-improving-skills：日常工作的经验蒸馏引擎</div></div><div class="info-2"><div class="info-item-1">自进化 AI 系统深度研究系列文章</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.svg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Berlinye</div><div class="author-info-description">记录 AI Agent、自进化系统、量化交易的研究与思考</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Berlinye555"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Berlinye555" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:admin@imzjw.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">✨ 欢迎来到我的博客！<br>分享 AI、量化交易、自进化系统的研究笔记</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">发生了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A6%E5%8D%95%E8%AF%B4%E8%AF%9D"><span class="toc-number">2.</span> <span class="toc-text">账单说话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%B6%E6%89%8B%E6%98%AF%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD%E7%8E%87"><span class="toc-number">3.</span> <span class="toc-text">凶手是缓存命中率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%83%E8%BF%98%E4%B8%8D%E5%BF%AB"><span class="toc-number">4.</span> <span class="toc-text">它还不快</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E4%B8%AA-Task-%E9%80%90%E4%B8%AA%E9%9E%AD%E5%B0%B8"><span class="toc-number">5.</span> <span class="toc-text">8 个 Task 逐个鞭尸</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E4%B8%AA%E6%95%99%E8%AE%AD"><span class="toc-number">6.</span> <span class="toc-text">三个教训</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E2%80%9C%E6%8E%A8%E8%8D%90%E2%80%9D%E4%B8%8D%E7%AD%89%E4%BA%8E%E2%80%9D%E9%80%82%E5%90%88%E2%80%9D"><span class="toc-number">6.1.</span> <span class="toc-text">1. “推荐”不等于”适合”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%AF%8F%E4%B8%AA%E5%AD%90%E4%BB%A3%E7%90%86%E9%83%BD%E8%AE%A1%E8%B4%B9"><span class="toc-number">6.2.</span> <span class="toc-text">2. 每个子代理都计费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BC%93%E5%AD%98%E6%98%AF%E7%99%BD%E9%80%81%E7%9A%84%E7%9C%81%E9%92%B1%E5%B7%A5%E5%85%B7"><span class="toc-number">6.3.</span> <span class="toc-text">3. 缓存是白送的省钱工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E5%90%8E%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-number">7.</span> <span class="toc-text">以后怎么做</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/28/subagent-cost-lessons/" title="花 40 块买来的教训——别什么事都丢给子代理">花 40 块买来的教训——别什么事都丢给子代理</a><time datetime="2026-06-28T15:00:00.000Z" title="发表于 2026-06-28 23:00:00">2026-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/lessons-from-blog-building/" title="一天搭建博客踩过的坑——用自己总结的方法复盘">一天搭建博客踩过的坑——用自己总结的方法复盘</a><time datetime="2026-06-27T05:00:00.000Z" title="发表于 2026-06-27 13:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/void-threshold/" title="虚空·门槛 —— 一个暗黑科幻互动叙事项目">虚空·门槛 —— 一个暗黑科幻互动叙事项目</a><time datetime="2026-06-27T04:00:00.000Z" title="发表于 2026-06-27 12:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/self-evolving-ai-research-journal/" title="自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱">自进化 AI 系统深度对比研究——16 个项目，1 个下午，1 张进化光谱</a><time datetime="2026-06-26T17:00:00.000Z" title="发表于 2026-06-27 01:00:00">2026-06-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/27/evolver-core/" title="Evolver：GEP 基因编程自进化引擎">Evolver：GEP 基因编程自进化引擎</a><time datetime="2026-06-26T16:00:00.000Z" title="发表于 2026-06-27 00:00:00">2026-06-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2026 By Berlinye</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark_dimmed' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'Berlinye555/Berlinye555.github.io',
+      'data-repo-id': 'R_kgDOTGJvdQ',
+      'data-category-id': 'DIC_kwDOTGJvdc4C_8pz',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>
